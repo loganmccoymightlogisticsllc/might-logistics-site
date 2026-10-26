@@ -1,8 +1,6 @@
 (function(){
-var HERO_VIDEO=""; /* put a video file name here, e.g. "hero.mp4", after uploading it next to index.html */
 function $(i){return document.getElementById(i)}
 var y=$('y');if(y)y.textContent=new Date().getFullYear();
-var hv=$('hv');if(hv){if(HERO_VIDEO){hv.src=HERO_VIDEO;hv.oncanplay=function(){hv.classList.add('on');hv.play()}}else{hv.remove()}}
 document.querySelectorAll('.card,.chips span,section h2,section .sub,section .tag').forEach(function(e){e.classList.add('rv')});
 var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12});
 document.querySelectorAll('.rv').forEach(function(e){io.observe(e)});
@@ -12,7 +10,8 @@ if(cn){cn.textContent=0;var cio=new IntersectionObserver(function(es){if(es[0].i
 var tf=$('tf');
 if(tf)tf.addEventListener('submit',function(e){e.preventDefault();var n=$('tn').value.trim();if(!n)return;var li=document.querySelectorAll('#tl li');li.forEach(function(l){l.classList.remove('on')});$('tl').classList.add('show');$('n2').textContent='Sample preview for load '+n+'. Live tracking launches with the shipper portal.';li.forEach(function(l,i){setTimeout(function(){l.classList.add('on')},500*(i+1))})});
 document.querySelectorAll('.links a').forEach(function(a){a.addEventListener('click',function(){$('lk').classList.remove('open')})});
-var FORM_ENDPOINT=""; window.MIGHT_FORM_ENDPOINT=FORM_ENDPOINT; /* paste your Formspree form URL here, e.g. "https://formspree.io/f/abcdwxyz" */
+var FORM_ENDPOINT=""; window.MIGHT_FORM_ENDPOINT=FORM_ENDPOINT; /* Once the back end is set up, /api/health answers ok and every form saves to the database. Until then forms fall back to email. */
+try{fetch("/api/health",{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.ok){FORM_ENDPOINT="/api/intake";window.MIGHT_FORM_ENDPOINT=FORM_ENDPOINT;var q=document.getElementById("qn");if(q)q.textContent=""}}).catch(function(){})}catch(e){}
 var qf=$('qf');
 if(qf){var qn=$('qn'),btn=qf.querySelector('button[type=submit]');
 if(!FORM_ENDPOINT&&qn)qn.textContent='Submitting opens an email to info@mightlogistics.com with your details.';
@@ -26,4 +25,16 @@ fetch(FORM_ENDPOINT,{method:'POST',body:d,headers:{'Accept':'application/json'}}
 if(!r.ok)throw 0;qf.style.display='none';var ok=$('ok');ok.innerHTML='<h3>Thanks, we got it</h3><p>A broker will contact you shortly. For urgent freight, call (201) 377-7043.</p>';ok.style.display='block'})
 .catch(function(){btn.disabled=false;btn.textContent='Submit Quote Request';if(qn)qn.textContent='Something went wrong. Please call (201) 377-7043 or email info@mightlogistics.com.'})})}
 if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches){document.querySelectorAll('svg').forEach(function(v){if(v.pauseAnimations)v.pauseAnimations()})}
+})();
+
+(function(){var V=window.MIGHT_VIDEOS||{};
+function embed(u){var m=u.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([\w-]{11})/);if(m)return {t:'yt',id:m[1]};m=u.match(/vimeo\.com\/(?:video\/)?(\d+)/);if(m)return {t:'vi',id:m[1]};if(/\.(mp4|webm|mov)(\?.*)?$/i.test(u))return {t:'file',u:u};return null}
+document.querySelectorAll('[data-vid]').forEach(function(sec){var u=V[sec.getAttribute('data-vid')];if(!u)return;var e=embed(u);if(!e)return;var box=sec.querySelector('.vbox');
+ if(e.t==='file'){box.innerHTML='<video controls playsinline preload="metadata"></video>';var v=box.firstChild;v.src=e.u;v.poster=e.u.replace(/\.\w+$/,'.jpg')}
+ else{var src=e.t==='yt'?'https://www.youtube-nocookie.com/embed/'+e.id+'?autoplay=1&rel=0':'https://player.vimeo.com/video/'+e.id+'?autoplay=1';
+  var th=e.t==='yt'?'https://i.ytimg.com/vi/'+e.id+'/hqdefault.jpg':'';
+  box.innerHTML='<button type="button" class="vplay" aria-label="Play video"'+(th?' style="background-image:url('+th+')"':'')+'><span></span></button>';
+  box.firstChild.addEventListener('click',function(){box.innerHTML='<iframe src="'+src+'" title="Might Logistics video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>'})}
+ sec.hidden=false});
+var hv=document.getElementById('hv');if(hv){if(V.hero){hv.poster=V.hero.replace(/\.\w+$/,'.jpg');hv.src=V.hero;hv.oncanplay=function(){hv.classList.add('on');hv.play()}}else{hv.remove()}}
 })();
