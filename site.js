@@ -10,7 +10,8 @@ if(cn){cn.textContent=0;var cio=new IntersectionObserver(function(es){if(es[0].i
 var tf=$('tf');
 if(tf)tf.addEventListener('submit',function(e){e.preventDefault();var n=$('tn').value.trim();if(!n)return;var li=document.querySelectorAll('#tl li');li.forEach(function(l){l.classList.remove('on')});$('tl').classList.add('show');$('n2').textContent='Sample preview for load '+n+'. Live tracking launches with the shipper portal.';li.forEach(function(l,i){setTimeout(function(){l.classList.add('on')},500*(i+1))})});
 document.querySelectorAll('.links a').forEach(function(a){a.addEventListener('click',function(){$('lk').classList.remove('open')})});
-var FORM_ENDPOINT=""; window.MIGHT_FORM_ENDPOINT=FORM_ENDPOINT; /* paste your Formspree form URL here, e.g. "https://formspree.io/f/abcdwxyz" */
+var FORM_ENDPOINT=""; window.MIGHT_FORM_ENDPOINT=FORM_ENDPOINT; /* Once the back end is set up, /api/health answers ok and every form saves to the database. Until then forms fall back to email. */
+try{fetch("/api/health",{cache:"no-store"}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j&&j.ok){FORM_ENDPOINT="/api/intake";window.MIGHT_FORM_ENDPOINT=FORM_ENDPOINT;var q=document.getElementById("qn");if(q)q.textContent=""}}).catch(function(){})}catch(e){}
 var qf=$('qf');
 if(qf){var qn=$('qn'),btn=qf.querySelector('button[type=submit]');
 if(!FORM_ENDPOINT&&qn)qn.textContent='Submitting opens an email to info@mightlogistics.com with your details.';
