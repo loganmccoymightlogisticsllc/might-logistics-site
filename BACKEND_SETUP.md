@@ -1,4 +1,8 @@
-# Back end setup (about 20 minutes, no coding)
+# Back end setup
+
+> Status: the Supabase project `might-logistics` (id wgtryggabrcctpwyavqe, US East 2) already has `schema.sql` and `storage.sql` applied. Remaining: create your admin login (step 1.4-1.5) and the Vercel settings (step 2).
+
+(Original full steps, about 20 minutes, no coding:)
 
 What this gives you: one private database that stores everything. Right now it receives every website form
 (quote requests, dispatch signups, carrier onboarding, with their PDFs) and holds the full structure for accounts,

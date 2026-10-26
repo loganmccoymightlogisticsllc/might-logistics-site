@@ -346,3 +346,11 @@ create policy intake_edit on intake_submissions for update using (
 
 -- audit log: admin read only. No insert/update/delete policy exists for anyone.
 create policy audit_read on audit_log for select using (is_admin());
+
+-- ---------- hardening (applied after the first run; fixes Supabase security-advisor warnings) ----------
+alter function check_invoice_gate() set search_path = public;
+alter function audit_block() set search_path = public;
+alter function guard_billing() set search_path = public;
+revoke execute on function app_role(), is_admin(), is_staff(), my_dept() from public, anon;
+grant execute on function app_role(), is_admin(), is_staff(), my_dept() to authenticated;
+revoke execute on function audit_row(), audit_block(), check_invoice_gate(), guard_billing() from public, anon, authenticated;
