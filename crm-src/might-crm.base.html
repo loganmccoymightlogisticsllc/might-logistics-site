@@ -1,0 +1,304 @@
+<title>Might CRM</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{--bg:#EEF1F6;--card:#FFFFFF;--ink:#0D1D34;--muted:#5A6A82;--line:#DCE2EC;--brand:#1F6FE5;--brand-soft:#E3EEFD;--nav:#07111F;--nav-ink:#DCE6F5;--amber:#FFB020;--amber-ink:#4A2F00;--hover:#F4F7FB;--ok:#0E7A55;--ok-soft:#DDF3EA;--warn:#8A5A00;--warn-soft:#FFF1D0;--bad:#B3261E;--bad-soft:#FDE4E2;--d-disp:#0E7A55;--d-disp-soft:#DDF3EA;--d-brk:#1F5FC4;--d-brk-soft:#E3EEFD;--d-sal:#8A5A00;--d-sal-soft:#FFF1D0;--shadow:0 1px 2px rgba(7,17,31,.06),0 4px 14px rgba(7,17,31,.05)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0A1424;--card:#0F1E36;--ink:#E8EEF8;--muted:#93A3BC;--line:#203455;--brand:#3B8CFF;--brand-soft:#16315C;--nav:#050C18;--nav-ink:#DCE6F5;--hover:#142845;--ok:#4FD1A1;--ok-soft:#10382E;--warn:#FFC85C;--warn-soft:#3A2D0E;--bad:#FF8A80;--bad-soft:#40201F;--d-disp:#4FD1A1;--d-disp-soft:#10382E;--d-brk:#7AB2FF;--d-brk-soft:#16315C;--d-sal:#FFC85C;--d-sal-soft:#3A2D0E;--shadow:0 1px 2px rgba(0,0,0,.4);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0A1424;--card:#0F1E36;--ink:#E8EEF8;--muted:#93A3BC;--line:#203455;--brand:#3B8CFF;--brand-soft:#16315C;--nav:#050C18;--nav-ink:#DCE6F5;--hover:#142845;--ok:#4FD1A1;--ok-soft:#10382E;--warn:#FFC85C;--warn-soft:#3A2D0E;--bad:#FF8A80;--bad-soft:#40201F;--d-disp:#4FD1A1;--d-disp-soft:#10382E;--d-brk:#7AB2FF;--d-brk-soft:#16315C;--d-sal:#FFC85C;--d-sal-soft:#3A2D0E;--shadow:0 1px 2px rgba(0,0,0,.4);color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:.85em}
+.sub{color:var(--muted)}
+#top{background:var(--nav);color:var(--nav-ink);display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.logo{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:.06em;white-space:nowrap}
+.logo svg{width:28px;height:28px}
+.logo small{display:block;font-weight:500;letter-spacing:.2em;font-size:9px;color:#6FA8FF}
+#sw{position:relative;flex:1 1 280px;max-width:520px;min-width:0}
+#sq{width:100%;background:#12233D;border:1px solid #223A5E;border-radius:8px;padding:8px 12px;color:#fff}
+#sq::placeholder{color:#8FA3C2}
+#sres{position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.25);overflow:hidden;z-index:50}
+#sres button{display:flex;width:100%;gap:10px;align-items:center;text-align:left;background:none;border:0;padding:9px 12px}
+#sres button:hover{background:var(--hover)}
+.who{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12px}
+.who select{background:#12233D;border:1px solid #223A5E;color:#fff;border-radius:8px;padding:7px 9px;max-width:230px}
+#tabs{background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:2px;overflow-x:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+#tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:12px 14px;color:var(--muted);font-weight:600;white-space:nowrap}
+#tabs button[aria-current=page]{color:var(--ink);border-bottom-color:var(--amber)}
+main{padding-block:18px 60px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:1280px;margin:0 auto}
+h1{font-size:1.45rem;margin:0 0 4px;text-wrap:balance}
+h2{font-size:1rem;margin:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);min-width:0}
+.card>header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.card>.pad{padding:14px 16px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+.g3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+@media (max-width:900px){.g2{grid-template-columns:minmax(0,1fr)}}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 9px;font-size:11.5px;font-weight:600;white-space:nowrap}
+.p-disp{background:var(--d-disp-soft);color:var(--d-disp)}.p-brk{background:var(--d-brk-soft);color:var(--d-brk)}.p-sal{background:var(--d-sal-soft);color:var(--d-sal)}
+.p-ok{background:var(--ok-soft);color:var(--ok)}.p-warn{background:var(--warn-soft);color:var(--warn)}.p-idle{background:var(--hover);color:var(--muted);border:1px solid var(--line)}.p-bad{background:var(--bad-soft);color:var(--bad)}
+.btn{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:7px 13px;font-weight:600}
+.btn:hover{background:var(--hover)}
+.btn.pri{background:var(--amber);border-color:var(--amber);color:var(--amber-ink)}
+.btn.blue{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);text-align:left;padding:9px 14px;border-bottom:1px solid var(--line);white-space:nowrap;font-weight:600}
+td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+tr.row{cursor:pointer}tr.row:hover td{background:var(--hover)}
+tr.lock td{color:var(--muted);background:repeating-linear-gradient(135deg,transparent 0 8px,var(--hover) 8px 16px)}
+.num{text-align:right}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 12px;font-weight:600;font-size:12.5px}
+.chip[aria-pressed=true]{background:var(--nav);border-color:var(--nav);color:#fff}
+.tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}
+.av{width:44px;height:44px;border-radius:10px;background:var(--nav);color:var(--amber);display:grid;place-items:center;font-weight:700;flex:none}
+.hl{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;padding:14px 16px;border-top:1px solid var(--line)}
+.hl span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.hl b{font-weight:600}
+.banner{display:flex;gap:10px;align-items:flex-start;border-radius:10px;padding:11px 14px;margin-bottom:16px;background:var(--warn-soft);color:var(--ink);border:1px solid var(--line)}
+.banner.info{background:var(--brand-soft)}
+.path{display:flex;gap:0;overflow-x:auto;margin:0 0 16px}
+.path button{flex:1 1 0;min-width:110px;border:0;background:var(--hover);color:var(--muted);padding:11px 16px 11px 26px;font-weight:600;clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%,14px 50%);margin-right:-6px}
+.path button:first-child{clip-path:polygon(0 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,0 100%);padding-left:16px;border-radius:8px 0 0 8px}
+.path button.done{background:var(--ok-soft);color:var(--ok)}
+.path button.cur{background:var(--brand);color:#fff}
+.path button:disabled{cursor:default}
+.tl{list-style:none;margin:0;padding:0}
+.tl li{display:flex;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line)}
+.tl li:last-child{border-bottom:0}
+.tl .ic{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;flex:none;font-size:13px;background:var(--hover);border:1px solid var(--line)}
+.kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px 24px;padding:14px 16px}
+.kv span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.board{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.col{background:var(--hover);border:1px solid var(--line);border-radius:12px;padding:10px;min-height:120px}
+.col h3{font-size:12px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:2px 4px 10px;display:flex;justify-content:space-between}
+.oc{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;cursor:pointer;box-shadow:var(--shadow)}
+.oc:hover{border-color:var(--brand)}
+.bar{display:flex;align-items:center;gap:10px;margin:8px 0}
+.bar i{display:block;height:10px;border-radius:5px;background:var(--brand)}
+.bar span{width:96px;font-size:12.5px;color:var(--muted)}
+.dep{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.dep.off{border-style:dashed;color:var(--muted)}
+#modal{position:fixed;inset:0;background:rgba(5,12,24,.55);display:grid;place-items:center;padding:16px;z-index:100}
+#modal[hidden]{display:none}
+.mb{background:var(--card);border-radius:14px;width:min(520px,100%);max-height:92vh;overflow:auto;padding:18px;border:1px solid var(--line)}
+.form label{display:block;margin-top:12px;font-size:12.5px;color:var(--muted);font-weight:600}
+.form input,.form select,.form textarea{display:block;width:100%;margin-top:4px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;color:var(--ink)}
+.form .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--nav);color:#fff;padding:10px 16px;border-radius:10px;z-index:200;box-shadow:0 8px 24px rgba(0,0,0,.3);max-width:90vw}
+#toast[hidden]{display:none}
+.story{border:1px solid var(--amber);background:var(--warn-soft)}
+.step{display:flex;gap:10px;margin:8px 0}
+.step b.n{width:22px;height:22px;border-radius:50%;background:var(--nav);color:var(--amber);display:grid;place-items:center;font-size:12px;flex:none}
+.empty{padding:22px 16px;color:var(--muted)}
+</style>
+<div id="top">
+ <div class="logo"><svg viewBox="0 0 40 40" aria-hidden="true"><polygon points="20,2 36,11 36,29 20,38 4,29 4,11" fill="#0D1D34" stroke="#3B8CFF" stroke-width="2"/><path d="M12 27V13l8 9 8-9v14" fill="none" stroke="#FFB020" stroke-width="3" stroke-linejoin="round"/></svg><div>MIGHT<small>CRM</small></div></div>
+ <div id="sw"><input id="sq" type="search" placeholder="Search accounts, MC or DOT number" autocomplete="off" aria-label="Search accounts"><div id="sres" hidden></div></div>
+ <div class="who"><button id="bell" type="button" aria-label="Notifications" aria-haspopup="true">&#128276;<b id="bn" hidden></b></button><span class="th"><label for="me" class="sub" style="color:#8FA3C2">Viewing as</label><select id="me"></select></span></div>
+</div>
+<nav id="tabs" aria-label="Sections"></nav>
+<main id="main"></main>
+<div id="np" hidden role="region" aria-label="Notifications"></div>
+<div id="modal" hidden></div>
+<div id="toast" hidden role="status"></div>
+<script>
+(function(){
+var TODAY='2026-10-24';
+var U=[{id:'u1',n:'You',r:'Admin'},{id:'u2',n:'Alex Romero',r:'Broker'},{id:'u3',n:'Jamie Lin',r:'Broker'},{id:'u4',n:'Sam Patel',r:'Dispatcher'},{id:'u5',n:'Riley Chen',r:'Dispatcher'},{id:'u6',n:'Marcus Bell',r:'Dispatcher'},{id:'u7',n:'Dana Brooks',r:'Sales'},{id:'u8',n:'Chris Ortega',r:'Sales'},{id:'u9',n:'Taylor Reed',r:'Sales'},{id:'u10',n:'Jordan Kim',r:'Sales'}];
+var DEPT={Broker:'Brokerage',Dispatcher:'Dispatch',Sales:'Sales'};
+var STG={Dispatch:['Qualify','Onboarding','Active'],Brokerage:['Prospect','Quoted','Active']};
+var ACC=[
+{id:'a1',n:'Lone Oak Hauling',type:'Carrier',mc:'211430',dot:'3120550',city:'Dallas, TX',ph:'(555) 020-0101',trucks:1,eq:'Dry van',since:'2026-08-24'},
+{id:'a2',n:'Cimarron Freight LLC',type:'Carrier',mc:'211877',dot:'3120902',city:'Oklahoma City, OK',ph:'(555) 020-0102',trucks:3,eq:'Reefer, dry van',since:'2026-06-02'},
+{id:'a3',n:'Hill Country Flatbed',type:'Carrier',mc:'212340',dot:'3121455',city:'San Antonio, TX',ph:'(555) 020-0103',trucks:2,eq:'Flatbed, step deck',since:'2026-07-11'},
+{id:'a4',n:'Rio Verde Transport',type:'Carrier',mc:'212901',dot:'3121988',city:'McAllen, TX',ph:'(555) 020-0104',trucks:1,eq:'Dry van',since:'2026-10-12'},
+{id:'a5',n:'Delta Ridge Carriers',type:'Carrier',mc:'213950',dot:'3123004',city:'Memphis, TN',ph:'(555) 020-0106',trucks:5,eq:'Dry van',since:'2026-05-20'},
+{id:'a6',n:'Brazos Valley Foods',type:'Shipper',mc:'',dot:'',city:'Waco, TX',ph:'(555) 010-0201',trucks:0,eq:'Reefer',since:'2026-03-03'},
+{id:'a7',n:'Redline Industrial Supply',type:'Shipper',mc:'',dot:'',city:'Houston, TX',ph:'(555) 010-0202',trucks:0,eq:'Dry van, flatbed',since:'2026-04-14'},
+{id:'a8',n:'Summit Auto Parts',type:'Shipper',mc:'',dot:'',city:'Dallas, TX',ph:'(555) 010-0203',trucks:0,eq:'Dry van',since:'2026-10-08'},
+{id:'a9',n:'Harbor Point Plastics',type:'Shipper',mc:'',dot:'',city:'Houston, TX',ph:'(555) 010-0204',trucks:0,eq:'Dry van',since:'2026-02-19'},
+{id:'a10',n:'Prairie Wind Energy',type:'Shipper',mc:'',dot:'',city:'Amarillo, TX',ph:'(555) 010-0205',trucks:0,eq:'Flatbed, oversize',since:'2026-10-20'},
+{id:'a11',n:'Pine Belt Trucking',type:'Carrier',mc:'214102',dot:'3124410',city:'Hattiesburg, MS',ph:'(555) 020-0111',trucks:4,eq:'Dry van',since:'2026-08-01'},
+{id:'a12',n:'Gulf Breeze Hauling',type:'Carrier',mc:'214655',dot:'3124901',city:'Mobile, AL',ph:'(555) 020-0112',trucks:2,eq:'Dry van',since:'2026-10-22'}];
+var CON=[['a1','Ray Sutton','Owner / driver','ray@loneoak.example','(555) 021-0101'],['a2','Dana Whitfield','Owner','dana@cimarron.example','(555) 021-0102'],['a2','Eli Brandt','Dispatch contact','eli@cimarron.example','(555) 021-0112'],['a3','Luis Ortega','Owner','luis@hillcountry.example','(555) 021-0103'],['a4','Marisol Vega','Owner','marisol@rioverde.example','(555) 021-0104'],['a5','Terrence Boyd','Owner','terrence@deltaridge.example','(555) 021-0106'],['a6','Nora Kaplan','Logistics manager','nora@brazosvalley.example','(555) 011-0201'],['a7','Greg Hollis','Shipping lead','greg@redline.example','(555) 011-0202'],['a8','Priya Nair','Purchasing','priya@summitauto.example','(555) 011-0203'],['a9','Tom Reyes','Logistics','tom@harborpoint.example','(555) 011-0204'],['a10','Ines Calder','Project manager','ines@prairiewind.example','(555) 011-0205'],['a11','Wade Perkins','Owner','wade@pinebelt.example','(555) 021-0111'],['a12','Hector Salas','Owner','hector@gulfbreeze.example','(555) 021-0112']];
+var OPP=[
+{id:'o1',acc:'a1',dept:'Dispatch',name:'Lone Oak Hauling: dispatch services',stage:'Active',owner:'u4',created:'2026-08-24',src:'Website signup',amt:1450},
+{id:'o2',acc:'a2',dept:'Dispatch',name:'Cimarron Freight: dispatch services',stage:'Active',owner:'u5',created:'2026-06-02',src:'Website signup',amt:3900},
+{id:'o3',acc:'a2',dept:'Brokerage',name:'Cimarron Freight: reefer capacity',stage:'Active',owner:'u2',created:'2026-09-15',src:'Carrier sourcing',amt:2100},
+{id:'o4',acc:'a3',dept:'Dispatch',name:'Hill Country Flatbed: dispatch services',stage:'Active',owner:'u4',created:'2026-07-11',src:'Website signup',amt:1800},
+{id:'o5',acc:'a4',dept:'Dispatch',name:'Rio Verde Transport: dispatch services',stage:'Onboarding',owner:'u6',created:'2026-10-12',src:'Website signup',amt:900},
+{id:'o6',acc:'a5',dept:'Dispatch',name:'Delta Ridge Carriers: dispatch services',stage:'Active',owner:'u5',created:'2026-05-20',src:'Website signup',amt:5200},
+{id:'o7',acc:'a6',dept:'Brokerage',name:'Brazos Valley Foods: reefer lanes',stage:'Active',owner:'u2',created:'2026-03-03',src:'Inbound quote',amt:6400},
+{id:'o8',acc:'a7',dept:'Brokerage',name:'Redline Industrial: weekly freight',stage:'Active',owner:'u3',created:'2026-04-14',src:'Inbound quote',amt:4300},
+{id:'o9',acc:'a8',dept:'Brokerage',name:'Summit Auto Parts: parts runs',stage:'Quoted',owner:'u2',created:'2026-10-08',src:'Inbound quote',amt:3100},
+{id:'o10',acc:'a9',dept:'Brokerage',name:'Harbor Point Plastics: contract lanes',stage:'Active',owner:'u3',created:'2026-02-19',src:'Referral',amt:3800},
+{id:'o11',acc:'a10',dept:'Brokerage',name:'Prairie Wind Energy: oversize',stage:'Prospect',owner:'u2',created:'2026-10-20',src:'Inbound quote',amt:7000},
+{id:'o12',acc:'a11',dept:'Brokerage',name:'Pine Belt Trucking: carrier relationship',stage:'Active',owner:'u3',created:'2026-08-01',src:'Carrier sourcing',amt:900},
+{id:'o13',acc:'a11',dept:'Dispatch',name:'Pine Belt Trucking: dispatch services',stage:'Qualify',owner:'u4',created:'2026-10-19',src:'Sales: Dana Brooks',amt:1100},
+{id:'o14',acc:'a12',dept:'Dispatch',name:'Gulf Breeze Hauling: dispatch services',stage:'Qualify',owner:'u6',created:'2026-10-22',src:'Sales: Chris Ortega',amt:1000}];
+var LAN=[['Dallas, TX','Atlanta, GA',780],['Houston, TX','Memphis, TN',585],['Oklahoma City, OK','Denver, CO',680],['San Antonio, TX','Laredo, TX',155],['Memphis, TN','Chicago, IL',530],['Dallas, TX','Kansas City, MO',500],['Austin, TX','Phoenix, AZ',1010],['McAllen, TX','Dallas, TX',510],['Atlanta, GA','Charlotte, NC',245],['Fort Worth, TX','Little Rock, AR',330]];
+var LOAD=[],ACT=[],seed=7;function rnd(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff}
+function addDays(s,n){return new Date(new Date(s+'T12:00:00Z').getTime()+n*864e5).toISOString().slice(0,10)}
+var dn=401,bn=1001;
+function dd(a,b){return Math.round((new Date(b+'T12:00:00Z')-new Date(a+'T12:00:00Z'))/864e5)}
+OPP.forEach(function(o){var span=dd(o.created,TODAY),n=o.stage==='Active'?(o.id==='o1'?3:Math.max(2,Math.min(40,Math.floor(span/(3+rnd()*4))))):0;
+ ACT.push({acc:o.acc,dept:o.dept,by:o.owner,type:'Stage',date:o.created,txt:'Opened "'+o.name+'" ('+o.dept+')'});
+ for(var i=0;i<n;i++){var ln=LAN[Math.floor(rnd()*LAN.length)],d=o.id==='o1'?addDays(o.created,[4,12,23][i]):addDays(o.created,Math.min(span,Math.round(span/n*(i+1)-rnd()*span/n*.7)));if(d>TODAY)d=TODAY;
+  var id=o.dept==='Dispatch'?'DL-26-'+('0'+(dn++)).slice(-4):'ML-26-'+(bn++),haul=ln[2]*(2.2+rnd()*.8),rev=o.dept==='Dispatch'?Math.round(haul*(.07+rnd()*.03)):Math.round(ln[2]*(2.3+rnd()*.9)),pf=o.dept==='Dispatch'?rev:Math.round(rev*(.08+rnd()*.1));
+  LOAD.push({id:id,acc:o.acc,opp:o.id,dept:o.dept,by:o.owner,o:ln[0],d:ln[1],mi:ln[2],pu:d,st:dd(d,TODAY)<4&&i>n-3?'Shipped':'Delivered',rev:rev,pf:pf});
+  if(i>=n-4)ACT.push({acc:o.acc,dept:o.dept,by:o.owner,type:'Load',date:d,txt:'Created load '+id+': '+ln[0]+' to '+ln[1]+' ('+ln[2]+' mi)'})}});
+ACT.push({acc:'a1',dept:'Dispatch',by:'u4',type:'Call',date:'2026-08-24',txt:'Onboarding call with Ray. One dry van, runs Dallas to Southeast. Agreement and W-9 received.'},
+{acc:'a2',dept:'Dispatch',by:'u5',type:'Note',date:'2026-09-02',txt:'Dispatch fee agreed. Prefers reefer lanes out of Oklahoma City.'},
+{acc:'a2',dept:'Brokerage',by:'u2',type:'Call',date:'2026-09-15',txt:'Asked Dana about reefer capacity for Brazos Valley loads.'},
+{acc:'a11',dept:'Brokerage',by:'u3',type:'Note',date:'2026-08-05',txt:'Reliable on Gulf Coast lanes. Insurance on file.'},
+{acc:'a11',dept:'Sales',by:'u7',type:'Call',date:'2026-10-18',txt:'Cold call. Wade is interested in dispatch for two of his four trucks.'},
+{acc:'a12',dept:'Sales',by:'u8',type:'Call',date:'2026-10-21',txt:'Hector wants dispatch help finding loads out of Mobile. Sent to the dispatch signup queue.'},
+{acc:'a6',dept:'Brokerage',by:'u2',type:'Email',date:'2026-10-14',txt:'Sent reefer rate sheet for the Q4 lanes.'});
+var LEAD=[
+{id:'l1',co:'Longview Express LLC',owner:'Darnell Price',phone:'(903) 555-0131',mc:'1933412',age:'2 days',city:'Longview, TX',trucks:2,agent:'u7',st:'Interested'},
+{id:'l2',co:'Cedar Mile Transport Inc',owner:'Maria Hernandez',phone:'(615) 555-0148',mc:'1933467',age:'2 days',city:'Nashville, TN',trucks:1,agent:'u7',st:'Contacted'},
+{id:'l3',co:'Blue Ridge Haulers LLC',owner:'James Walker',phone:'(404) 555-0172',mc:'1933502',age:'3 days',city:'Atlanta, GA',trucks:4,agent:'u7',st:'New'},
+{id:'l4',co:'Northstar Cartage Corp',owner:'Linda Nguyen',phone:'(612) 555-0119',mc:'1933530',age:'3 days',city:'Minneapolis, MN',trucks:1,agent:'u8',st:'Interested'},
+{id:'l5',co:'Prairie Dog Freight LLC',owner:'Minh Kowalski',phone:'(405) 555-0166',mc:'1933571',age:'4 days',city:'Tulsa, OK',trucks:3,agent:'u8',st:'New'},
+{id:'l6',co:'Red River Logistics LLC',owner:'Olga Petrov',phone:'(318) 555-0107',mc:'1933599',age:'4 days',city:'Shreveport, LA',trucks:2,agent:'u8',st:'Contacted'}];
+var S={me:'u4',view:'home',id:'',f:'all',of:'all',ob:'board',ctab:'act',modal:null};
+function $(s){return document.querySelector(s)}
+function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function usr(id){return U.filter(function(u){return u.id===id})[0]||{n:'Someone',r:''}}
+function me(){return usr(S.me)}
+function adm(){return me().r==='Admin'}
+function myDept(){return DEPT[me().r]||null}
+function acc(id){return ACC.filter(function(a){return a.id===id})[0]}
+function opp(id){return OPP.filter(function(o){return o.id===id})[0]}
+function fd(s){return new Date(s+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'})}
+function usd(n){return '$'+Math.round(n).toLocaleString('en-US')}
+function dpill(d){return '<span class="pill '+({Dispatch:'p-disp',Brokerage:'p-brk',Sales:'p-sal'}[d]||'p-idle')+'">'+d+'</span>'}
+function canOpp(o){if(adm())return true;var m=me();if(m.r==='Sales')return o.src==='Sales: '+m.n;return DEPT[m.r]===o.dept}
+function canLoad(l){if(adm())return true;var m=me();if(m.r==='Sales')return false;return DEPT[m.r]===l.dept}
+function canAct(a){if(adm())return true;return DEPT[me().r]===a.dept}
+function canEdit(o){return adm()||(DEPT[me().r]===o.dept&&me().r!=='Sales')}
+function toast(t){var e=$('#toast');e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(function(){e.hidden=true},3200)}
+function depts(a){var s=[];OPP.forEach(function(o){if(o.acc===a&&s.indexOf(o.dept)<0)s.push(o.dept)});return s}
+function ini(n){return n.split(/\s+/).slice(0,2).map(function(w){return w[0]}).join('').toUpperCase()}
+function go(v,id){S.view=v;S.id=id||'';S.ctab='act';window.scrollTo(0,0);render()}
+
+function tabsR(){var t=[['home','Home'],['accts','Accounts'],['opps','Opportunities'],['loads','Loads']];if(me().r!=='Sales')t.push(['carr','Carriers']);if(me().r==='Broker'||adm())t.push(['quotes','Quotes']);if(me().r==='Sales'||adm())t.push(['leads','Leads']);if(adm())t.push(['pros','Prospecting']);if(adm())t.push(['reports','Reports']);if(adm())t.push(['log','Change log']);
+ var cur=S.view==='acct'?'accts':S.view==='opp'?'opps':S.view==='load'?'loads':S.view;$('#tabs').innerHTML=t.map(function(x){return '<button type="button" data-a="go" data-v="'+x[0]+'"'+(cur===x[0]?' aria-current="page"':'')+'>'+x[1]+'</button>'}).join('')}
+
+function homeV(){var m=me(),vis=OPP.filter(canOpp),h='<h1>Good morning, '+esc(m.n==='You'?'there':m.n.split(' ')[0])+'</h1><div class="sub" style="margin-bottom:16px">One shared record of every company. You see the whole company list, and the details of the work your department does.</div>';
+ var a1=acc('a1'),a1b=OPP.some(function(o){return o.acc==='a1'&&o.dept==='Brokerage'});
+ h+=window.attnCard();h+='<div class="card story" style="margin-bottom:16px"><div class="pad"><b>The example: one company, two departments</b>'
+ +'<div class="step"><b class="n">1</b><div>On <b>Aug 24</b>, Sam (Dispatch) signed up <b>Lone Oak Hauling</b> and booked their loads. That created the account and a Dispatch opportunity.</div></div>'
+ +'<div class="step"><b class="n">2</b><div>'+(a1b?'<b>Done.</b> A broker added a Brokerage opportunity to the same account. Open it and look at the Opportunities list and the banner.':'Two months later, a broker starts using their trucks. They open the same account and add a <b>Brokerage opportunity</b>. Nothing is retyped.')+'</div></div>'
+ +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">'+(a1b?'<button class="btn pri" type="button" data-a="acct" data-v="a1">Open Lone Oak Hauling</button>':'<button class="btn pri" type="button" data-a="story">Show me, as Alex (Broker)</button><button class="btn" type="button" data-a="acct" data-v="a1">Open the account</button>')+'</div></div></div>';
+ var by={};vis.forEach(function(o){var k=o.dept+'|'+o.stage;by[k]=(by[k]||0)+1});
+ var bars='';['Dispatch','Brokerage'].forEach(function(d){if(!vis.some(function(o){return o.dept===d}))return;bars+='<div style="margin-top:6px">'+dpill(d)+'</div>';STG[d].concat(['Closed lost']).forEach(function(s){var n=by[d+'|'+s]||0;if(s==='Closed lost'&&!n)return;bars+='<div class="bar"><span>'+s+'</span><i style="width:'+Math.max(4,n*34)+'px"></i><b>'+n+'</b></div>'})});
+ var multi=ACC.filter(function(a){return depts(a.id).length>1});
+ h+='<div class="grid g2"><div class="card"><header><h2>Your pipeline</h2><span class="sub">'+vis.length+' opportunities you can see</span></header><div class="pad">'+(bars||'<div class="sub">No opportunities yet.</div>')+'</div></div>'
+ +'<div class="card"><header><h2>Worked by more than one department</h2></header><div class="pad">'+multi.map(function(a){return '<div style="display:flex;justify-content:space-between;gap:8px;margin-bottom:10px"><a href="#" data-a="acct" data-v="'+a.id+'" style="color:var(--brand);font-weight:600">'+esc(a.n)+'</a><span>'+depts(a.id).map(dpill).join(' ')+'</span></div>'}).join('')+'<div class="sub">So nobody calls a company another department already works with without knowing.</div></div></div></div>';
+ return h}
+
+function accsV(){var q=S.f,L=ACC.filter(function(a){if(q==='mine')return OPP.some(function(o){return o.acc===a.id&&canOpp(o)});if(q==='Carrier')return a.type==='Carrier';if(q==='Shipper')return a.type==='Shipper';if(q==='multi')return depts(a.id).length>1;return true});
+ var F=[['all','All accounts'],['mine','My department'],['Carrier','Carriers'],['Shipper','Shippers'],['multi','Multiple departments']];
+ var rows=L.map(function(a){return '<tr class="row" data-a="acct" data-v="'+a.id+'"><td><b>'+esc(a.n)+'</b></td><td>'+a.type+'</td><td class="mono">'+(a.mc?'MC '+a.mc:'')+'</td><td>'+esc(a.city)+'</td><td>'+depts(a.id).map(dpill).join(' ')+'</td><td>'+esc(usr(OPP.filter(function(o){return o.acc===a.id})[0].owner).n)+'</td></tr>'}).join('');
+ return '<h1>Accounts</h1><div class="sub">Every carrier and shipper in one list.</div><div class="tools"><div class="chips">'+F.map(function(f){return '<button class="chip" type="button" aria-pressed="'+(q===f[0])+'" data-a="f" data-v="'+f[0]+'">'+f[1]+'</button>'}).join('')+'</div></div><div class="card"><div class="tw"><table><thead><tr><th>Account</th><th>Type</th><th>MC</th><th>Location</th><th>Departments</th><th>Opened by</th></tr></thead><tbody>'+(rows||'<tr><td colspan="6" class="empty">Nothing here.</td></tr>')+'</tbody></table></div></div>'}
+
+function pathR(o){var st=STG[o.dept],i=st.indexOf(o.stage),ed=canEdit(o);return '<div class="path" role="group" aria-label="Stage">'+st.map(function(s,k){return '<button type="button" class="'+(o.stage==='Closed lost'?'':k<i?'done':k===i?'cur':'')+'" data-a="stage" data-id="'+o.id+'" data-v="'+s+'"'+(ed?'':' disabled')+'>'+(k<i?'&#10003; ':'')+s+'</button>'}).join('')+'<button type="button" class="'+(o.stage==='Closed lost'?'cur':'')+'" style="'+(o.stage==='Closed lost'?'background:var(--bad)':'')+'" data-a="stage" data-id="'+o.id+'" data-v="Closed lost"'+(ed?'':' disabled')+'>Closed lost</button></div>'}
+
+function acctV(){var a=acc(S.id),os=OPP.filter(function(o){return o.acc===a.id}),ds=depts(a.id),m=me(),h='';
+ var canNewO=adm()||m.r==='Broker'||m.r==='Dispatcher',canLoadN=OPP.some(function(o){return o.acc===a.id&&canOpp(o)&&o.stage!=='Closed lost'&&(adm()||DEPT[m.r]===o.dept)})&&m.r!=='Sales';
+ var mo=a.type==='Carrier'?'<span class="pill p-idle">Carrier</span>':'<span class="pill p-idle">Shipper</span>';
+ h+='<div class="card" style="margin-bottom:16px"><div class="pad" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><div class="av">'+ini(a.n)+'</div><div style="flex:1;min-width:200px"><div class="sub" style="font-size:11px;text-transform:uppercase;letter-spacing:.08em">Account</div><h1 style="margin:0">'+esc(a.n)+'</h1><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'+mo+ds.map(dpill).join('')+(a.mc?'<span class="sub mono">MC '+a.mc+' · DOT '+a.dot+'</span>':'')+'</div></div>'
+ +'<div style="display:flex;gap:8px;flex-wrap:wrap">'+(canNewO?'<button class="btn pri" type="button" data-a="newopp">New opportunity</button>':'')+(canLoadN?'<button class="btn" type="button" data-a="newload">New load</button>':'')+'<button class="btn" type="button" data-a="newact">Log activity</button></div></div>'
+ +'<div class="hl"><div><span>Location</span><b>'+esc(a.city)+'</b></div><div><span>Phone</span><b>'+esc(a.ph)+'</b></div>'+(a.type==='Carrier'?'<div><span>Trucks</span><b>'+a.trucks+' · '+esc(a.eq)+'</b></div>':'<div><span>Ships</span><b>'+esc(a.eq)+'</b></div>')+'<div><span>Company since</span><b>'+fd(a.since)+'</b></div>'+(adm()?'<div><span>Profit (all time)</span><b>'+usd(LOAD.filter(function(l){return l.acc===a.id}).reduce(function(s,l){return s+l.pf},0))+'</b></div>':'')+'</div></div>';
+ if(ds.length>1)h+='<div class="banner"><span aria-hidden="true">&#9888;</span><div><b>'+ds.join(' and ')+' both work with '+esc(a.n)+'.</b> You can see that they do. Each department\'s rates, notes and loads stay private to that department'+(a.type==='Carrier'&&ds.indexOf('Brokerage')>-1&&ds.indexOf('Dispatch')>-1?'.<br><span class="sub">Heads up: we both hire this carrier for brokered freight and dispatch for them. Check with an admin before negotiating rates.</span>':'.')+'</div></div>';
+ var ors=os.map(function(o){var ok=canOpp(o);return ok?'<tr class="row" data-a="opp" data-v="'+o.id+'"><td><b>'+esc(o.name)+'</b></td><td>'+dpill(o.dept)+'</td><td>'+o.stage+'</td><td>'+esc(usr(o.owner).n)+'</td><td>'+fd(o.created)+'</td>'+(adm()?'<td class="num">'+usd(o.amt)+'</td>':'')+'</tr>':'<tr class="lock"><td>&#128274; Restricted</td><td>'+dpill(o.dept)+'</td><td>Hidden</td><td>'+esc(usr(o.owner).n)+'</td><td>'+fd(o.created)+'</td>'+(adm()?'<td></td>':'')+'</tr>'}).join('');
+ var ls=LOAD.filter(function(l){return l.acc===a.id}),vl=ls.filter(canLoad),hid=ls.length-vl.length;
+ var lrs=vl.sort(function(x,y){return x.pu<y.pu?1:-1}).map(function(l){return '<tr class="row" data-a="load" data-v="'+l.id+'"><td class="mono">'+l.id+'</td><td>'+dpill(l.dept)+'</td><td>'+esc(l.o)+' to '+esc(l.d)+'</td><td class="num">'+l.mi+'</td><td>'+fd(l.pu)+'</td><td>'+l.st+'</td><td>'+esc(usr(l.by).n)+'</td>'+(adm()?'<td class="num">'+usd(l.pf)+'</td>':'')+'</tr>'}).join('');
+ var acts=ACT.filter(function(x){return x.acc===a.id}).sort(function(x,y){return x.date<y.date?1:x.date>y.date?-1:0}),va=acts.filter(canAct),ha=acts.length-va.length;
+ var ics={Call:'&#9742;',Email:'&#9993;',Note:'&#9998;',Load:'&#9992;',Stage:'&#9873;'};
+ var tl=va.map(function(x){return '<li><div class="ic" aria-hidden="true">'+(ics[x.type]||'&#8226;')+'</div><div style="min-width:0"><div><b>'+x.type+'</b> '+dpill(x.dept)+'</div><div>'+esc(x.txt)+'</div><div class="sub" style="font-size:12px">'+esc(usr(x.by).n)+' · '+fd(x.date)+'</div></div></li>'}).join('');
+ var det='<div class="kv"><div><span>Account name</span>'+esc(a.n)+'</div><div><span>Type</span>'+a.type+'</div><div><span>MC number</span>'+(a.mc||'None')+'</div><div><span>USDOT number</span>'+(a.dot||'None')+'</div><div><span>Phone</span>'+esc(a.ph)+'</div><div><span>Location</span>'+esc(a.city)+'</div></div>';
+ var cons=CON.filter(function(c){return c[0]===a.id}).map(function(c){return '<tr><td><b>'+esc(c[1])+'</b></td><td>'+esc(c[2])+'</td><td>'+esc(c[3])+'</td><td>'+esc(c[4])+'</td></tr>'}).join('');
+ var left='<div class="card" style="margin-bottom:16px"><header><div class="chips"><button class="chip" type="button" aria-pressed="'+(S.ctab==='act')+'" data-a="ctab" data-v="act">Activity</button><button class="chip" type="button" aria-pressed="'+(S.ctab==='det')+'" data-a="ctab" data-v="det">Details</button></div></header>'
+ +(S.ctab==='det'?det:'<ul class="tl">'+(tl||'<li class="empty">No activity you can see yet.</li>')+(ha?'<li><div class="ic" aria-hidden="true">&#128274;</div><div class="sub">'+ha+' more activit'+(ha===1?'y':'ies')+' from other departments. Hidden from you.</div></li>':'')+'</ul>')+'</div>'
+ +'<div class="card" style="margin-bottom:16px"><header><h2>Opportunities ('+os.length+')</h2></header><div class="tw"><table><thead><tr><th>Name</th><th>Department</th><th>Stage</th><th>Owner</th><th>Opened</th>'+(adm()?'<th class="num">Est. monthly profit</th>':'')+'</tr></thead><tbody>'+ors+'</tbody></table></div></div>'
+ +'<div class="card" style="margin-bottom:16px"><header><h2>Loads ('+vl.length+')</h2>'+(hid?'<span class="sub">+'+hid+' in other departments, hidden</span>':'')+'</header><div class="tw"><table><thead><tr><th>Load</th><th>Dept</th><th>Lane</th><th class="num">Miles</th><th>Pickup</th><th>Status</th><th>Created by</th>'+(adm()?'<th class="num">Profit</th>':'')+'</tr></thead><tbody>'+(lrs||'<tr><td colspan="8" class="empty">No loads you can see.</td></tr>')+'</tbody></table></div></div>'
+ +'<div class="card"><header><h2>Contacts</h2></header><div class="tw"><table><thead><tr><th>Name</th><th>Role</th><th>Email</th><th>Phone</th></tr></thead><tbody>'+cons+'</tbody></table></div></div>';
+ var right='<div class="card" style="margin-bottom:16px"><header><h2>Who works this account</h2></header><div class="pad">'+['Dispatch','Brokerage','Sales'].map(function(d){var o=os.filter(function(x){return x.dept===d})[0];if(d==='Sales'){var sl=os.filter(function(x){return /^Sales:/.test(x.src)})[0];return sl?'<div class="dep">'+dpill('Sales')+'<div style="margin-top:6px">Sourced by <b>'+esc(sl.src.replace('Sales: ',''))+'</b></div><div class="sub">'+fd(sl.created)+'</div></div>':''}
+  return o?'<div class="dep">'+dpill(d)+'<div style="margin-top:6px"><b>'+esc(usr(o.owner).n)+'</b></div><div class="sub">Since '+fd(o.created)+'</div></div>':'<div class="dep off">'+dpill(d)+'<div style="margin-top:6px">Not working this account</div></div>'}).join('')+'</div></div>';
+ if(a.type==='Carrier'&&me().r!=='Sales')right+=window.vetCard(a);if(adm()){var by={};LOAD.filter(function(l){return l.acc===a.id}).forEach(function(l){by[l.dept]=by[l.dept]||{r:0,p:0,n:0};by[l.dept].r+=l.rev;by[l.dept].p+=l.pf;by[l.dept].n++});
+  right+='<div class="card"><header><h2>Money (admin only)</h2></header><div class="pad">'+(Object.keys(by).map(function(d){return '<div style="margin-bottom:10px">'+dpill(d)+'<div class="sub" style="margin-top:4px">'+by[d].n+' loads · revenue '+usd(by[d].r)+' · <b style="color:var(--ink)">profit '+usd(by[d].p)+'</b></div></div>'}).join('')||'<div class="sub">No loads yet.</div>')+'<div class="sub">Brokers, dispatchers and sales never see this.</div></div></div>'}
+ return h+'<div class="grid g2"><div>'+left+'</div><div>'+right+'</div></div>'}
+
+function oppV(){var o=opp(S.id);if(!o||!canOpp(o)){return '<div class="card"><div class="empty">You do not have access to this opportunity.</div></div>'}var a=acc(o.acc),ls=LOAD.filter(function(l){return l.opp===o.id});
+ var acts=ACT.filter(function(x){return x.acc===a.id&&x.dept===o.dept}).sort(function(x,y){return x.date<y.date?1:-1});
+ return '<div class="sub" style="font-size:11px;text-transform:uppercase;letter-spacing:.08em">Opportunity · '+o.dept+'</div><h1>'+esc(o.name)+'</h1><div class="sub" style="margin-bottom:14px">Account: <a href="#" data-a="acct" data-v="'+a.id+'" style="color:var(--brand);font-weight:600">'+esc(a.n)+'</a></div>'+pathR(o)
+ +'<div class="grid g2"><div><div class="card" style="margin-bottom:16px"><header><h2>Details</h2></header><div class="kv"><div><span>Owner</span>'+esc(usr(o.owner).n)+'</div><div><span>Department</span>'+dpill(o.dept)+'</div><div><span>Opened</span>'+fd(o.created)+'</div><div><span>Source</span>'+esc(o.src)+'</div>'+(adm()?'<div><span>Est. monthly profit</span>'+usd(o.amt)+'</div>':'')+'</div></div>'
+ +'<div class="card"><header><h2>Loads ('+ls.length+')</h2>'+((adm()||DEPT[me().r]===o.dept)&&me().r!=='Sales'&&o.stage!=='Closed lost'?'<button class="btn" type="button" data-a="newload" data-v="'+o.id+'">New load</button>':'')+'</header><div class="tw"><table><thead><tr><th>Load</th><th>Lane</th><th class="num">Miles</th><th>Pickup</th><th>Status</th><th>Created by</th></tr></thead><tbody>'+(ls.map(function(l){return '<tr class="row" data-a="load" data-v="'+l.id+'"><td class="mono">'+l.id+'</td><td>'+esc(l.o)+' to '+esc(l.d)+'</td><td class="num">'+l.mi+'</td><td>'+fd(l.pu)+'</td><td>'+l.st+'</td><td>'+esc(usr(l.by).n)+'</td></tr>'}).join('')||'<tr><td colspan="6" class="empty">No loads yet.</td></tr>')+'</tbody></table></div></div></div>'
+ +'<div class="card"><header><h2>Activity</h2></header><ul class="tl">'+(acts.map(function(x){return '<li><div class="ic" aria-hidden="true">&#8226;</div><div><div><b>'+x.type+'</b></div><div>'+esc(x.txt)+'</div><div class="sub" style="font-size:12px">'+esc(usr(x.by).n)+' · '+fd(x.date)+'</div></div></li>'}).join('')||'<li class="empty">Nothing yet.</li>')+'</ul></div></div>'}
+
+function oppsV(){var vis=OPP.filter(canOpp),hid=OPP.length-vis.length,f=S.of,L=vis.filter(function(o){return f==='all'||o.dept===f}),ds=[];['Dispatch','Brokerage'].forEach(function(d){if(vis.some(function(o){return o.dept===d}))ds.push(d)});
+ var h='<h1>Opportunities</h1><div class="sub">'+(hid?hid+' more in other departments are hidden from you.':'Everything across the company.')+'</div><div class="tools"><div class="chips"><button class="chip" type="button" aria-pressed="'+(f==='all')+'" data-a="of" data-v="all">All</button>'+ds.map(function(d){return '<button class="chip" type="button" aria-pressed="'+(f===d)+'" data-a="of" data-v="'+d+'">'+d+'</button>'}).join('')+'</div><div class="chips" style="margin-left:auto"><button class="chip" type="button" aria-pressed="'+(S.ob==='board')+'" data-a="ob" data-v="board">Board</button><button class="chip" type="button" aria-pressed="'+(S.ob==='list')+'" data-a="ob" data-v="list">List</button></div></div>';
+ if(S.ob==='list'){return h+'<div class="card"><div class="tw"><table><thead><tr><th>Opportunity</th><th>Account</th><th>Dept</th><th>Stage</th><th>Owner</th>'+(adm()?'<th class="num">Est. profit</th>':'')+'</tr></thead><tbody>'+L.map(function(o){return '<tr class="row" data-a="opp" data-v="'+o.id+'"><td><b>'+esc(o.name)+'</b></td><td>'+esc(acc(o.acc).n)+'</td><td>'+dpill(o.dept)+'</td><td>'+o.stage+'</td><td>'+esc(usr(o.owner).n)+'</td>'+(adm()?'<td class="num">'+usd(o.amt)+'</td>':'')+'</tr>'}).join('')+'</tbody></table></div></div>'}
+ var cols=(f==='Brokerage'?STG.Brokerage:f==='Dispatch'?STG.Dispatch:['Qualify / Prospect','Onboarding / Quoted','Active','Closed lost']);
+ function colOf(o){var i=STG[o.dept].indexOf(o.stage);if(o.stage==='Closed lost')return 3;if(f==='all')return i;return i}
+ var names=f==='all'?cols:STG[f].concat(['Closed lost']);
+ h+='<div class="board" style="grid-template-columns:repeat('+names.length+',minmax(220px,1fr))">'+names.map(function(c,k){var items=L.filter(function(o){return o.stage==='Closed lost'?k===names.length-1:STG[o.dept].indexOf(o.stage)===k});
+  return '<div class="col"><h3><span>'+c+'</span><span>'+items.length+'</span></h3>'+items.map(function(o){return '<div class="oc" data-a="opp" data-v="'+o.id+'"><div style="font-weight:600">'+esc(acc(o.acc).n)+'</div><div class="sub" style="margin:2px 0 6px;font-size:12.5px">'+esc(o.name.split(': ')[1]||o.name)+'</div><div style="display:flex;justify-content:space-between;align-items:center;gap:6px">'+dpill(o.dept)+'<span class="sub" style="font-size:12px">'+esc(usr(o.owner).n)+'</span></div>'+(adm()?'<div style="margin-top:6px;font-weight:600">'+usd(o.amt)+' / mo</div>':'')+'</div>'}).join('')+'</div>'}).join('')+'</div>';return h}
+
+function loadsV(){var L=LOAD.filter(canLoad).sort(function(a,b){return a.pu<b.pu?1:-1}),hid=LOAD.length-L.length;
+ return '<h1>Loads</h1><div class="sub">'+(hid?hid+' loads from other departments are hidden from you.':'Every load across the company.')+'</div><div class="card" style="margin-top:14px"><div class="tw"><table><thead><tr><th>Load</th><th>Dept</th><th>Account</th><th>Lane</th><th class="num">Miles</th><th>Pickup</th><th>Status</th><th>Created by</th>'+(adm()?'<th class="num">Revenue</th><th class="num">Profit</th>':'')+'</tr></thead><tbody>'+L.map(function(l){return '<tr class="row" data-a="acct" data-v="'+l.acc+'"><td class="mono">'+l.id+'</td><td>'+dpill(l.dept)+'</td><td>'+esc(acc(l.acc).n)+'</td><td>'+esc(l.o)+' to '+esc(l.d)+'</td><td class="num">'+l.mi+'</td><td>'+fd(l.pu)+'</td><td>'+l.st+'</td><td>'+esc(usr(l.by).n)+'</td>'+(adm()?'<td class="num">'+usd(l.rev)+'</td><td class="num">'+usd(l.pf)+'</td>':'')+'</tr>'}).join('')+'</tbody></table></div></div>'}
+
+function leadsCar(){var m=me(),L=LEAD.filter(function(l){return l.kind!=='Shipper'&&(adm()||l.agent===m.id)});
+ return hdrL()+'<div class="card" style="margin-top:14px"><div class="tw"><table><thead><tr><th>Company</th><th>Owner</th><th>Phone</th><th>MC</th><th>MC age</th><th>Status</th>'+(adm()?'<th>Agent</th>':'')+'<th></th></tr></thead><tbody>'+L.map(function(l){return '<tr><td><b>'+esc(l.co)+'</b><div class="sub">'+esc(l.city)+' · '+l.trucks+' truck'+(l.trucks>1?'s':'')+'</div></td><td>'+esc(l.owner)+'</td><td>'+esc(l.phone)+'</td><td class="mono">'+l.mc+'</td><td>'+l.age+'</td><td>'+(l.st==='Converted'?'<span class="pill p-ok">Converted</span>':'<span class="pill p-idle">'+l.st+'</span>')+'</td>'+(adm()?'<td>'+esc(usr(l.agent).n)+'</td>':'')+'<td class="num">'+(l.st==='Converted'?'<button class="btn" type="button" data-a="acct" data-v="'+l.acct+'">Open account</button>':'<button class="btn pri" type="button" data-a="convert" data-v="'+l.id+'">Convert</button>')+'</td></tr>'}).join('')+'</tbody></table></div></div>'}
+
+function hdrL(){var lk=S.lk||'Carrier',nS=LEAD.filter(function(l){return l.kind==='Shipper'&&(adm()||l.agent===S.me)&&l.st==='New'}).length;return '<h1>Leads</h1><div class="sub">Cold-call accounts from the daily assignment. When one says yes, convert it and everything carries over.</div><div class="tools"><div class="chips"><button class="chip" type="button" aria-pressed="'+(lk==='Carrier')+'" data-a="lk" data-v="Carrier">Carriers (dispatch)</button><button class="chip" type="button" aria-pressed="'+(lk==='Shipper')+'" data-a="lk" data-v="Shipper">Shippers (brokerage) ('+nS+')</button></div></div>'}
+window.leadsAny=function(){return (S.lk==='Shipper')?hdrL()+window.shipV():leadsCar()};
+function render(){var me_=$('#me');if(!me_.options.length){me_.innerHTML=U.map(function(u){return '<option value="'+u.id+'">'+esc(u.n==='You'?'You · Admin':u.n+' · '+u.r)+'</option>'}).join('')}me_.value=S.me;tabsR();
+ var v=S.view;if(v==='leads'&&!(me().r==='Sales'||adm()))v='home';if((v==='reports'||v==='pros')&&!adm())v='home';if(window.okView&&!window.okView(v))v='home';if(v==='opp'){var o=opp(S.id);if(!o)v='home'}
+ $('#main').innerHTML=({home:homeV,accts:accsV,acct:acctV,opp:oppV,opps:oppsV,loads:window.loadsV2,leads:window.leadsAny,reports:window.repV,pros:window.prosV,carr:window.carV,quotes:window.qtV,log:window.logV,load:window.loadDV}[v]||homeV)();if(v==='reports'&&window.repAfter)window.repAfter();if(v==='log'&&window.logAfter)window.logAfter();if(window.bellUp)window.bellUp()}
+
+function modal(h){var m=$('#modal');m.innerHTML=h?'<div class="mb" role="dialog" aria-modal="true">'+h+'</div>':'';m.hidden=!h;S.modal=!!h}
+function mNewOpp(){var a=acc(S.id),m=me(),ds=adm()?['Dispatch','Brokerage']:[DEPT[m.r]],ex=ds.filter(function(d){return OPP.some(function(o){return o.acc===a.id&&o.dept===d&&o.stage!=='Closed lost'})});
+ return '<form class="form" id="fno"><h2>New opportunity</h2><div class="sub">Account: <b>'+esc(a.n)+'</b>. Same company record, no retyping.</div>'+(ds.length===1&&ex.length?'<div class="banner" style="margin-top:12px;margin-bottom:0"><div>Your department already has an open opportunity here.</div></div>':'')
+ +'<label for="nod">Department<select id="nod">'+ds.map(function(d){return '<option>'+d+'</option>'}).join('')+'</select></label><label for="non">Name<input id="non" value="'+esc(a.n)+': '+(ds[0]==='Dispatch'?'dispatch services':'carrier relationship')+'"></label>'
+ +(adm()?'<label for="noo">Owner<select id="noo">'+U.filter(function(u){return u.r==='Broker'||u.r==='Dispatcher'}).map(function(u){return '<option value="'+u.id+'">'+esc(u.n)+'</option>'}).join('')+'</select></label>':'')
+ +'<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px"><button class="btn" type="button" data-a="mclose">Cancel</button><button class="btn pri" type="submit">Create opportunity</button></div></form>'}
+function mNewLoad(pre){var a=acc(S.id),m=me(),os=OPP.filter(function(o){return o.acc===a.id&&canOpp(o)&&o.stage!=='Closed lost'&&(adm()||DEPT[m.r]===o.dept)});
+ return '<form class="form" id="fnl"><h2>New load</h2><div class="sub">For <b>'+esc(a.n)+'</b>. The load is stamped with your name and department.</div><label for="nlo">Opportunity<select id="nlo">'+os.map(function(o){return '<option value="'+o.id+'"'+(o.id===pre?' selected':'')+'>'+esc(o.name)+' ('+o.dept+')</option>'}).join('')+'</select></label>'
+ +window.carField(a)+'<div class="row2"><label for="nlf">Pickup<input id="nlf" required placeholder="Dallas, TX"></label><label for="nlt">Drop off<input id="nlt" required placeholder="Atlanta, GA"></label></div><div class="row2"><label for="nld">Pickup date<input id="nld" type="date" value="'+TODAY+'"></label><label for="nlm">Miles<input id="nlm" inputmode="numeric" placeholder="780"></label></div>'
+ +'<div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px"><button class="btn" type="button" data-a="mclose">Cancel</button><button class="btn pri" type="submit">Create load</button></div></form>'}
+function mNewAct(){var a=acc(S.id);return '<form class="form" id="fna"><h2>Log activity</h2><div class="sub">On <b>'+esc(a.n)+'</b>. Visible to your department.</div><label for="nat">Type<select id="nat"><option>Call</option><option>Email</option><option>Note</option></select></label>'
+ +(adm()?'<label for="nad">Department<select id="nad"><option>Dispatch</option><option>Brokerage</option><option>Sales</option></select></label>':'')+'<label for="nax">What happened<textarea id="nax" rows="3" required></textarea></label><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px"><button class="btn" type="button" data-a="mclose">Cancel</button><button class="btn pri" type="submit">Save</button></div></form>'}
+
+document.addEventListener('click',function(e){var t=e.target.closest('[data-a]');if(e.target.id==='modal'){modal(null);return}if(!t){return}var a=t.dataset.a,v=t.dataset.v;
+ if(a==='go'){if(v==='accts')S.f='all';go(v)}else if(a==='acct'){e.preventDefault();go('acct',v)}else if(a==='opp'){go('opp',v)}
+ else if(a==='f'){S.f=v;render()}else if(a==='of'){S.of=v;render()}else if(a==='ob'){S.ob=v;render()}else if(a==='ctab'){S.ctab=v;render()}
+ else if(a==='newopp'){modal(mNewOpp())}else if(a==='newload'){modal(mNewLoad(v))}else if(a==='newact'){modal(mNewAct())}else if(a==='mclose'){modal(null)}
+ else if(a==='stage'){var o=opp(t.dataset.id);if(!o||!canEdit(o)||o.stage===v)return;ACT.push({acc:o.acc,dept:o.dept,by:S.me,type:'Stage',date:TODAY,txt:'Moved "'+o.name+'" from '+o.stage+' to '+v});lg('Stage','Moved "'+o.name+'" from '+o.stage+' to '+v,o.acc);o.stage=v;toast('Stage changed to '+v);render()}
+ else if(a==='story'){S.me='u2';go('acct','a1');modal(mNewOpp());toast('Now viewing as Alex (Broker). Create the opportunity.')}
+ else if(a==='convert'){var l=LEAD.filter(function(x){return x.id===v})[0];if(!l||l.st==='Converted')return;var nid='a'+(ACC.length+1);ACC.push({id:nid,n:l.co,type:'Carrier',mc:l.mc,dot:String(4420000+ACC.length*7),city:l.city,ph:l.phone,trucks:l.trucks,eq:'Dry van',since:TODAY});CON.push([nid,l.owner,'Owner','',l.phone]);
+  var oid='o'+(OPP.length+1);OPP.push({id:oid,acc:nid,dept:'Dispatch',name:l.co+': dispatch services',stage:'Qualify',owner:'u4',created:TODAY,src:'Sales: '+usr(l.agent).n,amt:1000});ACT.push({acc:nid,dept:'Sales',by:l.agent,type:'Call',date:TODAY,txt:'Converted from cold-call lead. Owner said yes to dispatch.'},{acc:nid,dept:'Dispatch',by:'u4',type:'Stage',date:TODAY,txt:'Opened "'+l.co+': dispatch services" (Dispatch)'});lg('Account','Converted carrier lead "'+l.co+'" into an account and a Dispatch opportunity',nid);nfy('u4','New Dispatch opportunity: '+l.co,'acct',nid);l.st='Converted';l.acct=nid;toast('Converted. Account, contact and a Dispatch opportunity were created.');go('acct',nid)}
+});
+document.addEventListener('submit',function(e){e.preventDefault();var id=e.target.id,a=acc(S.id),m=me();
+ if(id==='fno'){var d=$('#nod').value,ow=adm()?$('#noo').value:S.me;if(adm()&&usr(ow).r!=='Broker'&&d==='Brokerage')ow=U.filter(function(u){return u.r==='Broker'})[0].id;if(adm()&&usr(ow).r!=='Dispatcher'&&d==='Dispatch')ow=U.filter(function(u){return u.r==='Dispatcher'})[0].id;
+  OPP.push({id:'o'+(OPP.length+1),acc:a.id,dept:d,name:$('#non').value.trim()||a.n,stage:STG[d][0],owner:ow,created:TODAY,src:'Existing account',amt:0});ACT.push({acc:a.id,dept:d,by:S.me,type:'Stage',date:TODAY,txt:'Opened a new '+d+' opportunity on this account'});lg('Stage','Opened a new '+d+' opportunity on '+a.n,a.id);if(ow!==S.me)nfy(ow,'New '+d+' opportunity on '+a.n,'acct',a.id);modal(null);toast(d+' opportunity added to '+a.n+'. See the banner.');render()}
+ else if(id==='fnl'){var gate=window.loadGate(a);if(!gate.ok)return;var op=opp($('#nlo').value),mi=parseInt($('#nlm').value.replace(/\D/g,''),10)||0,nid=op.dept==='Dispatch'?'DL-26-'+(dn++):'ML-26-'+(bn++);LOAD.push({id:nid,acc:a.id,opp:op.id,dept:op.dept,by:S.me,o:$('#nlf').value.trim(),d:$('#nlt').value.trim(),mi:mi,pu:$('#nld').value||TODAY,st:'Booked',rev:0,pf:0,car:gate.car,docs:{},inv:'Not ready',pay:'Held'});lg('Load','Created load '+nid+': '+$('#nlf').value.trim()+' to '+$('#nlt').value.trim()+(gate.note?' ('+gate.note+')':''),a.id,nid);ACT.push({acc:a.id,dept:op.dept,by:S.me,type:'Load',date:TODAY,txt:'Created load '+nid+': '+$('#nlf').value.trim()+' to '+$('#nlt').value.trim()});modal(null);toast('Load '+nid+' created on '+op.name+'.');render()}
+ else if(id==='fna'){var dp=adm()?$('#nad').value:DEPT[m.r];ACT.push({acc:a.id,dept:dp,by:S.me,type:$('#nat').value,date:TODAY,txt:$('#nax').value.trim()});lg('Activity','Logged a '+$('#nat').value.toLowerCase()+' on '+a.n+': '+$('#nax').value.trim().slice(0,90),a.id);modal(null);toast('Activity saved.');render()}});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&S.modal)modal(null)});
+$('#me').addEventListener('change',function(e){S.me=e.target.value;if((S.view==='leads'&&!(me().r==='Sales'||adm()))||((S.view==='reports'||S.view==='pros')&&!adm()))S.view='home';if(S.view==='opp'&&!canOpp(opp(S.id)))S.view='home';if(window.okView&&!window.okView(S.view))S.view='home';var np_=$('#np');if(np_)np_.hidden=true;render()});
+$('#sq').addEventListener('input',function(e){var q=e.target.value.trim().toLowerCase(),r=$('#sres');if(!q){r.hidden=true;return}var L=ACC.filter(function(a){return (a.n+' '+a.mc+' '+a.dot).toLowerCase().indexOf(q)>-1}).slice(0,6);r.innerHTML=L.length?L.map(function(a){return '<button type="button" data-s="'+a.id+'"><b>'+esc(a.n)+'</b><span class="sub">'+a.type+(a.mc?' · MC '+a.mc:'')+'</span></button>'}).join(''):'<div class="empty">No accounts match.</div>';r.hidden=false});
+$('#sres').addEventListener('click',function(e){var b=e.target.closest('[data-s]');if(!b)return;$('#sres').hidden=true;$('#sq').value='';go('acct',b.dataset.s)});
+document.addEventListener('click',function(e){if(!e.target.closest('#sw'))$('#sres').hidden=true});
+document.documentElement.setAttribute('data-ui','side');
+/*REPORTS*/
+render();
+})();
+</script>

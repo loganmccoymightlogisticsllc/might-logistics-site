@@ -1,0 +1,22 @@
+#bell{position:relative;background:var(--bg);border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 10px;font-size:15px;line-height:1}
+#bell b{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;border-radius:9px;background:var(--amber);color:var(--amber-ink);font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+#np{position:fixed;top:56px;right:max(12px,env(safe-area-inset-right,0px));width:min(400px,calc(100vw - 24px));max-height:70vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);z-index:60;padding:6px}
+#np[hidden]{display:none}
+.nh{display:flex;justify-content:space-between;align-items:center;padding:8px 8px 6px}
+.nf{padding:8px;font-size:12px;color:var(--muted)}
+.nt{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;background:none;border:0;border-radius:8px;padding:9px 8px;color:var(--ink)}
+.nt:hover{background:var(--hover)}.nt.un span{font-weight:600}.nt:not(.un){opacity:.7}
+.dt{flex:none;width:9px;height:9px;border-radius:50%;margin-top:5px;background:var(--brand)}.dt.w{background:var(--amber)}.dt.f{background:var(--bad)}
+.why{margin:0 0 6px;padding:0;list-style:none}.why li,.why-i{padding-left:16px;position:relative;margin:3px 0}
+.why li:before,.why-i:before{content:"";position:absolute;left:2px;top:7px;width:8px;height:8px;border-radius:50%;background:var(--amber)}
+.why li.f:before,.why-i.f:before{background:var(--bad)}
+.vb{border-radius:10px;padding:10px 12px;margin-top:12px;border:1px solid var(--line);background:var(--warn-soft)}
+.vb.ok{background:var(--ok-soft)}.vb.bad{background:var(--bad-soft)}.vb.info{background:var(--brand-soft)}
+.vb label.ck{display:flex;gap:8px;align-items:center;margin-top:8px;color:var(--ink)}.vb label.ck input{width:auto;margin:0}
+.dr{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid var(--line)}.dr:last-child{border-bottom:0}
+.rg{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.grid.g4{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+.tools select,.tools input[type=search]{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 10px;color:var(--ink)}
+td.mono{white-space:nowrap}
+#bell b[hidden]{display:none}
+.who .th[hidden]{display:none}
