@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Might Shipper Portal</title><meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>[hidden]{display:none!important}
+
+/* Layout: navy top bar with tabs, centered content column, shipment detail in a right drawer. Customer-facing: plain words, one amber action ("Request a quote"). */
+:root{--bg:#f2f4f8;--surface:#ffffff;--ink:#0c1626;--muted:#5a667a;--line:#dde3ec;--bar:#0b1830;--bar-ink:#b4c2d8;--brand:#1f6fe5;--brand-ink:#ffffff;--accent:#ffb020;--accent-ink:#1a1100;
+--ok:#117a45;--ok-bg:#dff3e8;--warn:#9a5b00;--warn-bg:#fdeccb;--bad:#b42323;--bad-bg:#fbe0e0;--info:#1a5fc4;--info-bg:#e0ecfd;--idle:#4b5870;--idle-bg:#e8ecf3;--shadow:0 12px 40px rgba(8,18,36,.2);
+--f-display:'Barlow Semi Condensed',system-ui,sans-serif;--f-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;--f-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#08101d;--surface:#0f1b2e;--ink:#e6edf8;--muted:#92a1b8;--line:#21324b;--bar:#060d1a;--brand:#5aa0ff;--brand-ink:#04101f;--ok:#5ad196;--ok-bg:#12331f;--warn:#f2b44f;--warn-bg:#3a2a0c;--bad:#ff8c8c;--bad-bg:#3d1717;--info:#7db4ff;--info-bg:#15294a;--idle:#9fb0c8;--idle-bg:#1a2840;--shadow:0 12px 40px rgba(0,0,0,.55);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#08101d;--surface:#0f1b2e;--ink:#e6edf8;--muted:#92a1b8;--line:#21324b;--bar:#060d1a;--brand:#5aa0ff;--brand-ink:#04101f;--ok:#5ad196;--ok-bg:#12331f;--warn:#f2b44f;--warn-bg:#3a2a0c;--bad:#ff8c8c;--bad-bg:#3d1717;--info:#7db4ff;--info-bg:#15294a;--idle:#9fb0c8;--idle-bg:#1a2840;--shadow:0 12px 40px rgba(0,0,0,.55);color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.5;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bar);z-index:40}
+button,input,select,textarea{font:inherit;color:inherit}h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance}
+.mono{font-family:var(--f-mono);font-size:.92em}
+.bar{background:var(--bar);color:var(--bar-ink);position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+.bar .in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px))}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;flex:none}.brand svg{width:34px;height:34px}.brand b{display:block;font-family:var(--f-display);font-size:1.15rem;letter-spacing:.16em;line-height:1}.brand small{display:block;font-size:.6rem;letter-spacing:.28em;color:#7fb1ff;margin-top:4px}
+.tabs{display:flex;gap:2px;overflow-x:auto;flex:1;min-width:0}.tabs button{background:none;border:0;color:inherit;padding:9px 13px;border-radius:7px;cursor:pointer;white-space:nowrap}.tabs button:hover{background:rgba(255,255,255,.07);color:#fff}.tabs button[aria-current=page]{background:rgba(90,160,255,.18);color:#fff;font-weight:600}
+.who{display:flex;align-items:center;gap:8px;font-size:.8rem;flex:none}.who select{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:7px;padding:6px 8px;max-width:190px}.who option{color:#111}.who button{background:none;border:0;color:#7fb1ff;cursor:pointer}
+.wrap{max-width:1100px;margin:0 auto;padding:22px max(16px,env(safe-area-inset-right,0px)) 48px max(16px,env(safe-area-inset-left,0px))}
+.head{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:16px}.head h1{font-size:1.9rem;font-weight:600}.head p{margin:2px 0 0;color:var(--muted)}
+.demo{display:inline-block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;background:var(--warn-bg);color:var(--warn);border-radius:4px;padding:2px 7px;margin-left:8px;vertical-align:middle}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:7px;padding:8px 13px;cursor:pointer;font-weight:500}.btn:hover{border-color:var(--brand)}.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}.btn.blue{background:var(--brand);border-color:var(--brand);color:var(--brand-ink);font-weight:600}.btn:disabled{opacity:.5;cursor:not-allowed}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.pill{display:inline-block;padding:1px 9px;border-radius:99px;font-size:.76rem;font-weight:600;white-space:nowrap}.pill.ok{background:var(--ok-bg);color:var(--ok)}.pill.warn{background:var(--warn-bg);color:var(--warn)}.pill.bad{background:var(--bad-bg);color:var(--bad)}.pill.info{background:var(--info-bg);color:var(--info)}.pill.idle{background:var(--idle-bg);color:var(--idle)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));background:var(--surface);border:1px solid var(--line);border-radius:10px;margin-bottom:16px}.stat{padding:14px 18px;border-right:1px solid var(--line)}.stat:last-child{border-right:0}
+.stat span{display:block;color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.08em}.stat b{font-family:var(--f-display);font-size:1.9rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.2}.stat b.bad{color:var(--bad)}
+.cols{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;min-width:0}.panel>h2{font-size:1.05rem;font-weight:600;padding:13px 16px;border-bottom:1px solid var(--line)}.pb{padding:14px 16px}
+.road{list-style:none;margin:0;padding:0}.road li{padding:13px 16px;border-bottom:1px solid var(--line);cursor:pointer}.road li:last-child{border-bottom:0}.road li:hover{background:var(--bg)}
+.road .r1{display:flex;justify-content:space-between;gap:8px;align-items:baseline;flex-wrap:wrap}.road b{font-family:var(--f-display);font-size:1.1rem;font-weight:600}
+.trk{position:relative;height:8px;border-radius:4px;background:var(--line);margin:12px 0 6px}.trk i{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--brand)}.trk em{position:absolute;top:-6px;width:20px;height:20px;margin-left:-10px;border-radius:50%;background:var(--accent);border:3px solid var(--surface);box-shadow:0 0 0 1px var(--brand)}
+.sub{color:var(--muted);font-size:.84rem}.att{list-style:none;margin:0;padding:0}.att li{display:flex;gap:12px;padding:11px 16px;border-bottom:1px solid var(--line);cursor:pointer}.att li:last-child{border-bottom:0}.att li:hover{background:var(--bg)}.att .sev{width:4px;border-radius:2px;flex:none}.sev.bad{background:var(--bad)}.sev.warn{background:var(--warn)}.sev.info{background:var(--info)}.att p{margin:0;min-width:0}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse}th{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);text-align:left;font-weight:600;padding:9px 14px;border-bottom:1px solid var(--line);white-space:nowrap}td{padding:11px 14px;border-bottom:1px solid var(--line);white-space:nowrap}tr:last-child td{border-bottom:0}tbody tr.row{cursor:pointer}tbody tr.row:hover{background:var(--bg)}td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}.tools input[type=search]{flex:1 1 200px;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:7px;padding:8px 12px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:4px 12px;cursor:pointer;font-size:.84rem}.chip[aria-pressed=true]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.qcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}.qc{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:grid;gap:8px;align-content:start}.qc .top{display:flex;justify-content:space-between;gap:8px;align-items:center}.qc .lane,.lane{font-family:var(--f-display);font-size:1.3rem;font-weight:600;margin:0}.qc .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.price{font-family:var(--f-display);font-size:1.7rem;font-weight:600;font-variant-numeric:tabular-nums}
+.drawer{position:fixed;inset:0;z-index:30;display:flex;justify-content:flex-end;background:rgba(5,12,24,.45)}.dr{width:min(540px,100%);height:100%;background:var(--surface);box-shadow:var(--shadow);overflow-y:auto;padding:calc(20px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) 22px}
+.dr header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:14px}.dr h2{font-size:1.4rem;font-weight:600}.x{background:none;border:1px solid var(--line);border-radius:7px;width:32px;height:32px;cursor:pointer;flex:none}
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px;margin:16px 0;padding:14px 0;border-block:1px solid var(--line)}.kv span{display:block;color:var(--muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.08em}
+.sec{margin:18px 0 8px;font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600}.box{border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.tl{list-style:none;margin:0;padding:0}.tl li{display:grid;grid-template-columns:14px 1fr;gap:10px;padding:0 0 14px;position:relative;color:var(--muted)}.tl li::before{content:"";width:12px;height:12px;border-radius:50%;border:2px solid var(--line);background:var(--surface);margin-top:4px;z-index:1}.tl li::after{content:"";position:absolute;left:5px;top:18px;bottom:-4px;width:2px;background:var(--line)}.tl li:last-child::after{display:none}
+.tl li.done{color:var(--ink)}.tl li.done::before{background:var(--ok);border-color:var(--ok)}.tl li.cur::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px var(--warn-bg)}.tl li.cur{color:var(--ink);font-weight:600}.tl small{display:block;color:var(--muted);font-weight:400}
+.docs{display:grid;gap:8px}.docs button{display:flex;justify-content:space-between;align-items:center;gap:8px;text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer}.docs button:hover{border-color:var(--brand)}
+.form{display:grid;gap:10px}.form label{display:grid;gap:4px;font-size:.8rem;color:var(--muted)}.form input,.form select,.form textarea{border:1px solid var(--line);background:var(--bg);border-radius:7px;padding:8px 10px;color:var(--ink);min-width:0;width:100%}.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal{position:fixed;inset:0;z-index:35;background:rgba(5,12,24,.55);display:grid;place-items:center;padding:16px}.mb{background:var(--surface);border-radius:12px;box-shadow:var(--shadow);width:min(560px,100%);max-height:100%;overflow:auto;padding:20px}
+.paper{border:1px solid var(--line);border-radius:6px;padding:18px;background:var(--bg)}.paper h3{font-size:1.2rem;margin-bottom:8px}.paper dl{display:grid;grid-template-columns:130px 1fr;gap:6px 12px;margin:0}.paper dt{color:var(--muted)}.paper dd{margin:0}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:8px;z-index:60;box-shadow:var(--shadow)}
+.tg{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}.tg:last-child{border-bottom:0}.tg input{width:18px;height:18px;accent-color:var(--brand)}
+#login{position:fixed;inset:0;z-index:50;background:var(--bar);display:grid;place-items:center;padding:16px;overflow:auto}.lg{background:var(--surface);border-radius:14px;padding:28px;width:min(400px,100%);box-shadow:var(--shadow)}.lg .brand{color:var(--ink);padding-bottom:18px}.lg .brand small{color:var(--brand)}.lg h2{font-size:1.4rem;margin-bottom:10px}
+.note{background:var(--warn-bg);color:var(--warn);border-radius:7px;padding:9px 11px;font-size:.82rem;margin:12px 0}
+@media(max-width:860px){.cols{grid-template-columns:minmax(0,1fr)}.bar .in{flex-wrap:wrap;gap:8px 12px}.tabs{order:3;flex:1 0 100%}.who select{max-width:140px}.stat{border-bottom:1px solid var(--line)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.lg .lgp{display:grid;gap:12px}.lnk{background:none;border:0;color:var(--brand);cursor:pointer;text-align:left;padding:0;font-size:.85rem}
+#lgmsg{color:var(--bad);min-height:1.3em;font-size:.85rem;margin-top:6px}.lg .form input{width:100%}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f6fe5"/><stop offset="1" stop-color="#0a2a5c"/></linearGradient>
+<symbol id="hex" viewBox="0 0 64 64"><path d="M32 2l26 15v30L32 62 6 47V17z" fill="url(#lg1)"/><path d="M32 8l21 12v24L32 56 11 44V20z" fill="none" stroke="#ffb020" stroke-width="1.8"/><path d="M21 40V24l11 11 11-11v16" fill="none" stroke="#fff" stroke-width="5.5" stroke-linecap="square"/><circle cx="32" cy="46" r="2.3" fill="#ffb020"/></symbol></defs></svg>
+<div id="login"><div class="lg">
+ <div class="brand"><svg><use href="#hex"/></svg><span><b>MIGHT</b><small>SHIPPER PORTAL</small></span></div>
+ <form id="lgf" class="lgp"><h2>Sign in to track your freight</h2>
+  <div class="form"><label for="lge">Email<input id="lge" type="email" required autocomplete="username"></label>
+  <label for="lgp">Password<input id="lgp" type="password" required autocomplete="current-password"></label>
+  <button id="lgb" class="btn pri" type="submit">Sign in</button></div>
+  <button id="lgfp" class="lnk" type="button">Forgot password?</button>
+  <div class="sub" style="font-size:.8rem">Need a login? Call (201) 377-7043 and we will set you up.</div></form>
+ <form id="lgr" class="lgp" hidden><h2>Choose a new password</h2><div class="form"><label for="lgn">New password (12+ characters)<input id="lgn" type="password" minlength="12" required autocomplete="new-password"></label><button class="btn pri" type="submit">Save and sign in</button></div></form>
+ <div id="lgmsg" role="alert"></div>
+</div></div>
+<div id="app" hidden>
+ <div class="bar"><div class="in">
+  <div class="brand"><svg><use href="#hex"/></svg><span><b>MIGHT</b><small>SHIPPER PORTAL</small></span></div>
+  <nav class="tabs" id="tabs"></nav>
+  <div class="who"><span id="who"></span><button id="out" type="button" data-a="out">Sign out</button></div>
+ </div></div>
+ <main class="wrap"><div class="head"><div><h1 id="ttl"></h1><p id="sub"></p></div><div id="act"></div></div><div id="view"></div></main>
+</div>
+<div id="drawer" class="drawer" hidden></div><div id="modal" class="modal" hidden></div><div id="toast" class="toast" hidden></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+/* Might Shipper Portal: real logins, real freight. A shipper sees only their own company's loads, quotes and invoices.
+   Every read goes through narrow database functions (shipper_loads, shipper_quotes, ...) that never return carrier names,
+   carrier pay or profit, and never another company's data. */
+(function () {
+var SB_URL = 'https://wgtryggabrcctpwyavqe.supabase.co', SB_KEY = 'sb_publishable_3nUoDYzDXDZ-pRvS94vvbw_4gysEc6r';
+var SB = window.__SB_MOCK || (window.supabase ? window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true } }) : null);
+var PHONE = '(201) 377-7043', EMAIL = 'info@mightlogistics.com';
+var ME = null, LOADS = [], QUOTES = [], S = { view: 'overview', f: 'Active', q: '', panel: null, modal: null };
+
+function $(s) { return document.querySelector(s); }
+function esc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+function dt(s) { return new Date(String(s).slice(0, 10) + 'T12:00:00'); }
+function fd(s) { return s ? dt(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'TBD'; }
+function fdy(s) { return s ? dt(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''; }
+function usd(n) { return '$' + Math.round(+n || 0).toLocaleString('en-US'); }
+function sum(a) { return a.reduce(function (x, y) { return x + y; }, 0); }
+function pill(t, c) { return '<span class="pill ' + c + '">' + esc(t) + '</span>'; }
+function toast(t) { var e = $('#toast'); e.textContent = t; e.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { e.hidden = true; }, 3200); }
+function errMsg(e) { var m = (e && (e.message || e.details)) || 'Something went wrong.'; return m.replace(/^.*?ERROR:\s*/, ''); }
+function must(r) { if (r && r.error) throw r.error; return r; }
+
+var ST = { Booked: ['Booked', 'warn'], Shipped: ['In transit', 'info'], Delivered: ['Delivered', 'ok'] };
+var STEPS = ['Booked', 'Shipped', 'Delivered'];
+function inv(l) {
+  if (l.invoice_status === 'Paid') return ['Paid', 'ok'];
+  if (l.invoice_status === 'Invoiced') return ['Invoice sent', 'warn'];
+  if (l.invoice_status === 'Ready') return ['Invoice being prepared', 'idle'];
+  return null;
+}
+function trk(l) { var i = STEPS.indexOf(l.status), p = i <= 0 ? 8 : i === 1 ? 50 : 100; return '<div class="trk" role="img" aria-label="' + esc(ST[l.status][0]) + '"><i style="width:' + p + '%"></i><em style="left:' + p + '%"></em></div>'; }
+function L(id) { return LOADS.filter(function (x) { return x.id === id; })[0]; }
+
+async function load() {
+  var a = must(await SB.rpc('shipper_loads')), b = must(await SB.rpc('shipper_quotes'));
+  LOADS = a.data || []; QUOTES = b.data || [];
+}
+
+/* ---------- screens ---------- */
+function openInv() { return LOADS.filter(function (l) { return l.invoice_status === 'Invoiced'; }); }
+function overview() {
+  var road = LOADS.filter(function (l) { return l.status === 'Shipped'; }),
+      up = LOADS.filter(function (l) { return l.status === 'Booked'; }),
+      oi = openInv(), qs = QUOTES.filter(function (q) { return q.status === 'Sent'; }),
+      done = LOADS.filter(function (l) { return l.status === 'Delivered'; }).slice(0, 5);
+  var att = [];
+  qs.forEach(function (q) { att.push({ s: 'info', t: 'Quote ' + q.id + ' is ready: ' + usd(q.total) + ' (' + esc(q.origin) + ' to ' + esc(q.destination) + ')', m: 'Call or email us to accept it.', a: 'nav', v: 'quotes' }); });
+  oi.forEach(function (l) { att.push({ s: 'warn', t: 'Invoice for ' + l.id + ': ' + usd(l.amount), m: l.origin + ' to ' + l.destination, a: 'load', v: l.id }); });
+  var row = function (l) { return '<li data-a="load" data-v="' + esc(l.id) + '"><div class="r1"><b>' + esc(l.origin) + ' to ' + esc(l.destination) + '</b>' + pill(ST[l.status][0], ST[l.status][1]) + '</div><div class="sub"><span class="mono">' + esc(l.id) + '</span> · pickup ' + fd(l.pickup_date) + (l.miles ? ' · ' + l.miles.toLocaleString('en-US') + ' mi' : '') + '</div>' + trk(l) + '</li>'; };
+  return '<div class="stats"><div class="stat"><span>On the road</span><b>' + road.length + '</b></div><div class="stat"><span>Upcoming pickups</span><b>' + up.length + '</b></div><div class="stat"><span>Quotes to review</span><b>' + qs.length + '</b></div><div class="stat"><span>Open invoices</span><b>' + usd(sum(oi.map(function (l) { return +l.amount; }))) + '</b></div></div>'
+    + '<div class="cols"><div style="display:grid;gap:16px;align-content:start;min-width:0"><div class="panel"><h2>On the road now</h2>' + (road.length ? '<ul class="road">' + road.map(row).join('') + '</ul>' : '<div class="pb sub">Nothing is on the road right now.</div>') + '</div>'
+    + '<div class="panel"><h2>Upcoming pickups</h2>' + (up.length ? '<ul class="road">' + up.map(row).join('') + '</ul>' : '<div class="pb sub">No loads waiting to pick up.</div>') + '</div></div>'
+    + '<div style="display:grid;gap:16px;align-content:start;min-width:0"><div class="panel"><h2>Needs your attention</h2>' + (att.length ? '<ul class="att">' + att.map(function (a) { return '<li data-a="' + a.a + '" data-v="' + esc(a.v) + '"><span class="sev ' + a.s + '"></span><p><b>' + a.t + '</b><br><span class="sub">' + esc(a.m) + '</span></p></li>'; }).join('') + '</ul>' : '<div class="pb sub">You are all caught up.</div>') + '</div>'
+    + '<div class="panel"><h2>Recent deliveries</h2><div class="tw"><table><tbody>' + (done.map(function (l) { return '<tr class="row" data-a="load" data-v="' + esc(l.id) + '"><td class="mono">' + esc(l.id) + '</td><td>' + esc(l.origin) + ' to ' + esc(l.destination) + '</td><td>' + fd(l.pickup_date) + '</td></tr>'; }).join('') || '<tr><td class="sub">No deliveries yet.</td></tr>') + '</tbody></table></div></div></div></div>';
+}
+function shipments() {
+  var ls = LOADS.filter(function (l) {
+    var act = l.status !== 'Delivered';
+    return (S.f === 'All' || (S.f === 'Active' ? act : !act)) && (!S.q || (l.id + l.origin + l.destination).toLowerCase().indexOf(S.q.toLowerCase()) > -1);
+  });
+  var chips = ['Active', 'Delivered', 'All'].map(function (s) { return '<button type="button" class="chip" aria-pressed="' + (S.f === s) + '" data-a="filter" data-v="' + s + '">' + s + '</button>'; }).join('');
+  return '<div class="tools"><input type="search" id="q" placeholder="Search load number or city" value="' + esc(S.q) + '" aria-label="Search shipments"><div class="chips">' + chips + '</div></div>'
+    + '<div class="panel"><div class="tw"><table><thead><tr><th>Load</th><th>Lane</th><th>Miles</th><th>Pickup</th><th>Status</th><th>Documents</th><th>Invoice</th></tr></thead><tbody>'
+    + (ls.map(function (l) { var iv = inv(l); return '<tr class="row" data-a="load" data-v="' + esc(l.id) + '"><td class="mono">' + esc(l.id) + '</td><td>' + esc(l.origin) + ' to ' + esc(l.destination) + '</td><td>' + (l.miles ? l.miles.toLocaleString('en-US') : '') + '</td><td>' + fd(l.pickup_date) + '</td><td>' + pill(ST[l.status][0], ST[l.status][1]) + '</td><td class="sub">' + [l.has_bol ? 'BOL' : '', l.has_pod ? 'POD' : ''].filter(Boolean).join(', ') + '</td><td>' + (iv ? pill(iv[0], iv[1]) : '') + '</td></tr>'; }).join('') || '<tr><td colspan="7" class="sub">No shipments match.</td></tr>')
+    + '</tbody></table></div></div>';
+}
+function quotes() {
+  var lab = { Sent: ['Ready for your answer', 'info'], Won: ['Accepted', 'ok'], Lost: ['Closed', 'idle'] };
+  return '<div class="panel pb" style="margin-bottom:16px"><b>Need a price?</b> <span class="sub">Send the details and your broker will reply with a price.</span></div>'
+    + (QUOTES.length ? '<div class="qcards">' + QUOTES.map(function (q) {
+      var l = lab[q.status] || ['', 'idle'];
+      return '<div class="qc"><div class="top"><span class="mono sub">' + esc(q.id) + '</span>' + pill(l[0], l[1]) + '</div><div class="lane">' + esc(q.origin) + ' to ' + esc(q.destination) + '</div><div class="sub">' + (q.miles ? q.miles.toLocaleString('en-US') + ' mi · ' : '') + 'sent ' + fd(q.sent_on) + '</div>'
+        + '<div class="price">' + usd(q.total) + '</div><div class="sub">$' + (+q.rate_per_mile).toFixed(2) + ' per mile'
+        + (q.status === 'Sent' ? '<br>To accept, call ' + PHONE + ' or reply to your broker.' : '') + '</div></div>';
+    }).join('') + '</div>' : '<div class="panel pb sub">No quotes yet. Press Request a quote.</div>');
+}
+function invoices() {
+  var is = LOADS.filter(function (l) { return l.invoice_status === 'Invoiced' || l.invoice_status === 'Paid'; }),
+      out = is.filter(function (l) { return l.invoice_status === 'Invoiced'; });
+  return '<div class="stats"><div class="stat"><span>Balance due</span><b>' + usd(sum(out.map(function (l) { return +l.amount; }))) + '</b></div><div class="stat"><span>Open invoices</span><b>' + out.length + '</b></div><div class="stat"><span>Paid</span><b>' + usd(sum(is.filter(function (l) { return l.invoice_status === 'Paid'; }).map(function (l) { return +l.amount; }))) + '</b></div></div>'
+    + '<div class="cols"><div class="panel"><h2>Invoices</h2><div class="tw"><table><thead><tr><th>Load</th><th>Lane</th><th>Pickup</th><th class="num">Amount</th><th>Status</th></tr></thead><tbody>'
+    + (is.map(function (l) { return '<tr class="row" data-a="load" data-v="' + esc(l.id) + '"><td class="mono">' + esc(l.id) + '</td><td>' + esc(l.origin) + ' to ' + esc(l.destination) + '</td><td>' + fd(l.pickup_date) + '</td><td class="num">' + usd(l.amount) + '</td><td>' + pill(l.invoice_status === 'Paid' ? 'Paid' : 'Due', l.invoice_status === 'Paid' ? 'ok' : 'warn') + '</td></tr>'; }).join('') || '<tr><td colspan="5" class="sub">No invoices yet.</td></tr>')
+    + '</tbody></table></div></div><div class="panel"><h2>Questions about a charge or how to pay?</h2><div class="pb"><p style="margin-top:0">Payment instructions are printed on every invoice. Please include the load number with your payment.</p><p class="sub">Call ' + PHONE + ' or email ' + EMAIL + '.</p></div></div></div>';
+}
+function account() {
+  return '<div class="cols"><div class="panel"><h2>Your login</h2><div class="pb"><b>' + esc(ME.name) + '</b><div class="sub">' + esc(ME.email) + '</div><div style="margin-top:6px">' + esc(ME.company) + '</div><div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" type="button" data-a="pw">Change password</button><button class="btn" type="button" data-a="out">Sign out</button></div></div></div>'
+    + '<div class="panel"><h2>Need help?</h2><div class="pb"><p style="margin-top:0">Call <b>' + PHONE + '</b> or email <b>' + EMAIL + '</b>.</p><p class="sub">Need another person at your company to have access? Ask us and we will add them.</p></div></div></div>';
+}
+var TT = { overview: ['Overview', function () { return 'Welcome, ' + ME.company; }], shipments: ['Shipments', 'Track every load from booking to delivery'], quotes: ['Quotes', 'Request a price and see your quotes'], invoices: ['Invoices', 'Balances and payment status'], account: ['Account', 'Your login and how to reach us'] };
+function render() {
+  var t = TT[S.view];
+  $('#ttl').textContent = t[0]; $('#sub').textContent = typeof t[1] === 'function' ? t[1]() : t[1];
+  $('#tabs').innerHTML = Object.keys(TT).map(function (k) { return '<button type="button" data-a="nav" data-v="' + k + '"' + (S.view === k ? ' aria-current="page"' : '') + '>' + TT[k][0] + '</button>'; }).join('');
+  $('#act').innerHTML = '<button class="btn" type="button" data-a="refresh">Refresh</button> <button class="btn pri" type="button" data-a="newq">Request a quote</button>';
+  $('#who').textContent = ME.name;
+  $('#view').innerHTML = { overview: overview, shipments: shipments, quotes: quotes, invoices: invoices, account: account }[S.view]();
+  var q = $('#q'); if (q && S.fq) { q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
+  drawerR(); modalR();
+}
+function drawerR() {
+  var e = $('#drawer'); if (!S.panel) { e.hidden = true; return; }
+  var l = L(S.panel); if (!l) { e.hidden = true; return; }
+  var i = STEPS.indexOf(l.status), iv = inv(l);
+  var steps = [['Booked', 'We have your load and are working it'], ['In transit', 'Picked up and on the road'], ['Delivered', 'Delivered to the receiver']].map(function (s, k) { return '<li class="' + (k < i ? 'done' : k === i ? (i === 2 ? 'done' : 'cur') : '') + '"><div>' + s[0] + '<small>' + s[1] + '</small></div></li>'; }).join('');
+  var docs = (l.has_bol ? '<button type="button" data-a="doc" data-v="' + esc(l.id) + '|bol"><span>Bill of lading</span><span class="sub">View</span></button>' : '') + (l.has_pod ? '<button type="button" data-a="doc" data-v="' + esc(l.id) + '|pod"><span>Proof of delivery</span><span class="sub">View</span></button>' : '');
+  e.hidden = false;
+  e.innerHTML = '<div class="dr" role="dialog" aria-label="Shipment ' + esc(l.id) + '"><header><div><h2 class="mono" style="font-family:var(--f-mono);font-size:1.2rem">' + esc(l.id) + '</h2>' + pill(ST[l.status][0], ST[l.status][1]) + '</div><button class="x" type="button" data-a="close" aria-label="Close">&times;</button></header>'
+    + '<p class="lane">' + esc(l.origin) + ' to ' + esc(l.destination) + '</p>' + trk(l)
+    + '<div class="kv"><div><span>Pickup date</span>' + fdy(l.pickup_date) + '</div><div><span>Distance</span>' + (l.miles ? l.miles.toLocaleString('en-US') + ' mi' : 'TBD') + '</div></div>'
+    + '<div class="sec">Progress</div><ul class="tl">' + steps + '</ul>'
+    + '<div class="sec">Documents</div>' + (docs ? '<div class="docs">' + docs + '</div>' : '<div class="sub">Documents appear here as soon as we have them.</div>')
+    + (iv ? '<div class="sec">Invoice</div><div class="box">' + pill(iv[0], iv[1]) + (l.amount != null ? ' <b style="margin-left:8px">' + usd(l.amount) + '</b>' : '') + '<div class="sub" style="margin-top:6px">Questions? Call ' + PHONE + '.</div></div>' : '')
+    + '</div>';
+}
+function modalR() {
+  var e = $('#modal'); if (!S.modal) { e.hidden = true; e.innerHTML = ''; return; }
+  e.hidden = false;
+  if (S.modal === 'q') e.innerHTML = '<div class="mb" role="dialog" aria-label="Request a quote"><form class="form" id="fq"><h2>Request a quote</h2><div class="sub">Your broker will reply with a price.</div><div class="g2"><label for="qo">Pick up in<input id="qo" required placeholder="City, ST" maxlength="120"></label><label for="qd">Deliver to<input id="qd" required placeholder="City, ST" maxlength="120"></label></div><div class="g2"><label for="qe">Equipment<select id="qe"><option>Dry van</option><option>Refrigerated</option><option>Flatbed</option><option>Step deck</option><option>Other</option></select></label><label for="qp">Pickup date<input id="qp" type="date"></label></div><label for="qw">Approximate weight (lbs)<input id="qw" inputmode="numeric" maxlength="20"></label><label for="qn">Anything else we should know?<textarea id="qn" rows="3" maxlength="1000"></textarea></label><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px"><button class="btn" type="button" data-a="mclose">Cancel</button><button class="btn pri" type="submit">Send request</button></div></form></div>';
+  if (S.modal === 'pw') e.innerHTML = '<div class="mb" role="dialog" aria-label="Change password"><form class="form" id="fpw"><h2>Change password</h2><div class="sub">At least 12 characters.</div><label for="pw1">New password<input id="pw1" type="password" minlength="12" autocomplete="new-password" required></label><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px"><button class="btn" type="button" data-a="mclose">Cancel</button><button class="btn pri" type="submit">Save</button></div></form></div>';
+}
+
+/* ---------- actions ---------- */
+async function refresh(quiet) { try { await load(); render(); if (!quiet) toast('Up to date.'); } catch (e) { toast(errMsg(e)); } }
+async function openDoc(id, kind) {
+  var w = window.open('', '_blank');
+  try {
+    var p = must(await SB.rpc('shipper_doc_path', { p_load: id, p_kind: kind })).data;
+    if (!p) throw new Error('That document is not available yet.');
+    var u = must(await SB.storage.from('load-docs').createSignedUrl(p, 300)).data.signedUrl;
+    if (w) w.location = u; else toast('Allow pop-ups to open the document.');
+  } catch (e) { if (w) w.close(); toast(errMsg(e)); }
+}
+var A = {
+  nav: function (t) { S.view = t.dataset.v; S.panel = null; S.fq = false; render(); window.scrollTo(0, 0); },
+  filter: function (t) { S.f = t.dataset.v; S.fq = false; render(); },
+  load: function (t) { S.panel = t.dataset.v; render(); },
+  close: function () { S.panel = null; render(); },
+  newq: function () { S.modal = 'q'; render(); var o = $('#qo'); if (o) o.focus(); },
+  pw: function () { S.modal = 'pw'; render(); },
+  mclose: function () { S.modal = null; render(); },
+  refresh: function () { refresh(); },
+  doc: function (t) { var p = t.dataset.v.split('|'); openDoc(p[0], p[1]); },
+  out: function () { SB.auth.signOut().then(function () { location.reload(); }); }
+};
+document.addEventListener('click', function (ev) {
+  var t = ev.target.closest('[data-a]');
+  if (!t) { if (ev.target.id === 'drawer') { S.panel = null; render(); } if (ev.target.id === 'modal') { S.modal = null; render(); } return; }
+  if (A[t.dataset.a]) { ev.preventDefault(); A[t.dataset.a](t); }
+});
+document.addEventListener('input', function (e) { if (e.target.id === 'q') { S.q = e.target.value; S.fq = true; render(); } });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { if (S.modal) S.modal = null; else S.panel = null; render(); } });
+document.addEventListener('submit', async function (ev) {
+  var id = ev.target.id;
+  if (id === 'fq') {
+    ev.preventDefault();
+    try {
+      must(await SB.rpc('shipper_request_quote', { p_origin: $('#qo').value, p_dest: $('#qd').value, p_equip: $('#qe').value, p_pickup: $('#qp').value, p_weight: $('#qw').value, p_notes: $('#qn').value }));
+      S.modal = null; render(); toast('Sent. Your broker will reply with a price.');
+    } catch (e) { toast(errMsg(e)); }
+  }
+  if (id === 'fpw') {
+    ev.preventDefault();
+    var p = $('#pw1').value; if (p.length < 12) { toast('Use at least 12 characters.'); return; }
+    try { must(await SB.auth.updateUser({ password: p })); S.modal = null; render(); toast('Password changed.'); } catch (e) { toast(errMsg(e)); }
+  }
+});
+
+/* ---------- sign in ---------- */
+async function boot() {
+  var msg = $('#lgmsg'), recovering = /type=recovery/.test(location.hash);
+  function show(t) { msg.textContent = t || ''; }
+  function pane(id) { ['lgf', 'lgr'].forEach(function (k) { $('#' + k).hidden = (k !== id); }); show(''); }
+  if (!SB) { show('Could not load the sign-in service. Check your connection and refresh.'); return; }
+  if (SB.auth.onAuthStateChange) SB.auth.onAuthStateChange(function (ev) { if (ev === 'PASSWORD_RECOVERY') { recovering = true; pane('lgr'); } });
+  async function enter() {
+    try {
+      var r = must(await SB.rpc('shipper_me')).data;
+      if (!r) { await SB.auth.signOut(); pane('lgf'); show('This login is not set up for the shipper portal. Staff sign in at /crm. Customers: call ' + PHONE + '.'); return; }
+      ME = r; await load(); $('#login').hidden = true; $('#app').hidden = false; S.view = 'overview'; render();
+      setInterval(function () { if (!document.hidden && !S.modal) refresh(true); }, 300000);
+    } catch (e) { pane('lgf'); show(errMsg(e)); }
+  }
+  var s0 = await SB.auth.getSession(); if (s0.data && s0.data.session && !recovering) await enter();
+  if (recovering) pane('lgr');
+  $('#lgf').addEventListener('submit', async function (ev) {
+    ev.preventDefault(); show(''); var b = $('#lgb'); b.disabled = true; b.textContent = 'Signing in...';
+    var r = await SB.auth.signInWithPassword({ email: $('#lge').value.trim(), password: $('#lgp').value });
+    b.disabled = false; b.textContent = 'Sign in';
+    if (r.error) { show('That email and password did not match.'); return; }
+    await enter();
+  });
+  $('#lgfp').addEventListener('click', async function () {
+    var em = $('#lge').value.trim(); if (!em) { show('Type your email above first, then press Forgot password.'); return; }
+    await SB.auth.resetPasswordForEmail(em, { redirectTo: location.origin + '/portal' });
+    show('If that email has a login, a reset link is on its way. Check your spam folder too.');
+  });
+  $('#lgr').addEventListener('submit', async function (ev) {
+    ev.preventDefault(); var p = $('#lgn').value; if (p.length < 12) { show('Use at least 12 characters.'); return; }
+    var r = await SB.auth.updateUser({ password: p }); if (r.error) { show(errMsg(r.error)); return; }
+    recovering = false; history.replaceState(null, '', location.pathname); await enter();
+  });
+}
+boot();
+})();
+
+</script></body></html>

@@ -41,3 +41,10 @@ install it with access to `might-logistics-site`.
 * The employee portal, CRM and shipper portal are still working prototypes with sample data. The next phase connects
   them to this database with real logins (Google sign-in plus 2-step for staff).
 * Never commit real keys. `.env.example` shows the names only.
+
+## Shipper portal, two-step sign-in and password reset (added Oct 2026)
+- Run `supabase/04_shipper_portal_and_mfa.sql` after `schema.sql` and `storage.sql` (already applied to the live project).
+- Staff app: `/crm`. Shipper portal: `/portal`. Both are built from `crm-src/` and `portal-src/` (`python3 crm-src/build_live.py`, `python3 portal-src/build_portal.py`).
+- Admins must turn on two-step sign-in (authenticator app) at their next sign-in. Anyone else can turn it on under "Two-step". Once on, the database refuses their data until the code is entered.
+- Password reset emails: in Supabase go to Authentication > URL Configuration, set Site URL to the live address, and add `https://<live address>/crm` and `https://<live address>/portal` under Redirect URLs.
+- Shipper logins are created by an admin under Team > Add a teammate > Role "Shipper" and tied to one shipper account. They are not staff and see only their own company's loads, quotes and invoices.

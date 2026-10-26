@@ -183,6 +183,7 @@ td.mono{white-space:nowrap}
 .lgbox input{display:block;width:100%;margin-top:4px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;color:var(--ink)}
 .lglogo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.06em}
 #lgmsg{color:var(--bad);min-height:1.2em;font-size:13px}
+.lgp{display:flex;flex-direction:column;gap:12px}.lgp[hidden]{display:none}.lnk{background:none;border:0;color:var(--brand,#3B8CFF);cursor:pointer;text-align:left;padding:0;font:inherit;font-size:13px}.lgbox input{box-sizing:border-box}
 #whoami{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 </style>
 <div id="top">
@@ -192,7 +193,12 @@ td.mono{white-space:nowrap}
 </div>
 <nav id="tabs" aria-label="Sections"></nav>
 <main id="main"></main>
-<div id="login"><form id="lgf" class="lgbox"><div class="lglogo"><svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><polygon points="20,2 36,11 36,29 20,38 4,29 4,11" fill="#0D1D34" stroke="#3B8CFF" stroke-width="2"/><path d="M12 27V13l8 9 8-9v14" fill="none" stroke="#FFB020" stroke-width="3" stroke-linejoin="round"/></svg><b>MIGHT CRM</b></div><h1>Sign in</h1><label for="lge">Email<input id="lge" type="email" required autocomplete="username"></label><label for="lgp">Password<input id="lgp" type="password" required autocomplete="current-password"></label><button id="lgb" class="btn pri" type="submit">Sign in</button><div id="lgmsg" role="alert"></div><div class="sub" style="font-size:12px">Staff only. Ask an admin if you need access.</div></form></div>
+<div id="login"><div class="lgbox"><div class="lglogo"><svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true"><polygon points="20,2 36,11 36,29 20,38 4,29 4,11" fill="#0D1D34" stroke="#3B8CFF" stroke-width="2"/><path d="M12 27V13l8 9 8-9v14" fill="none" stroke="#FFB020" stroke-width="3" stroke-linejoin="round"/></svg><b>MIGHT CRM</b></div>
+<form id="lgf" class="lgp"><h1>Sign in</h1><label for="lge1">Email<input id="lge1" type="email" required autocomplete="username"></label><label for="lgp">Password<input id="lgp" type="password" required autocomplete="current-password"></label><button id="lgb" class="btn pri" type="submit">Sign in</button><button id="lgfp" class="lnk" type="button">Forgot password?</button><div class="sub" style="font-size:12px">Staff only. Ask an admin if you need access.</div></form>
+<form id="lgm" class="lgp" hidden><h1>Enter your code</h1><div class="sub">Open your authenticator app and type the 6-digit number for Might CRM.</div><label for="lgc">6-digit code<input id="lgc" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required></label><button class="btn pri" type="submit">Verify</button><button id="lgout" class="lnk" type="button">Use a different account</button></form>
+<div id="lge" class="lgp" hidden><h1>Set up two-step sign-in</h1><div class="sub"><b>Required for admins.</b> A stolen password alone will no longer get anyone in.</div><div id="lgeb"></div></div>
+<form id="lgr" class="lgp" hidden><h1>Choose a new password</h1><label for="lgn">New password (12+ characters)<input id="lgn" type="password" minlength="12" required autocomplete="new-password"></label><button class="btn pri" type="submit">Save and sign in</button></form>
+<div id="lgmsg" role="alert"></div></div></div>
 <div id="np" hidden role="region" aria-label="Notifications"></div>
 <div id="modal" hidden></div>
 <div id="toast" hidden role="status"></div>
@@ -903,7 +909,7 @@ document.addEventListener('input',function(e){var t=e.target,a=t.dataset&&t.data
 window.LIVE=true;
 var SB_URL=window.MIGHT_SB_URL||'https://wgtryggabrcctpwyavqe.supabase.co',SB_KEY=window.MIGHT_SB_KEY||'sb_publishable_3nUoDYzDXDZ-pRvS94vvbw_4gysEc6r';
 var SB=window.__SB_MOCK||(window.supabase?window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true}}):null);
-var RLABEL={admin:'Admin',broker:'Broker',dispatcher:'Dispatcher',sales:'Sales'};
+var RLABEL={admin:'Admin',broker:'Broker',dispatcher:'Dispatcher',sales:'Sales',shipper:'Shipper'};
 var INBOX=[],TEAM=[],ME_ID=null;
 /* wipe every bit of sample data */
 [ACC,CON,OPP,LOAD,ACT,LEAD,U,QT,LOGX,NTF].forEach(function(a){a.length=0});Object.keys(VET).forEach(function(k){delete VET[k]});
@@ -936,7 +942,7 @@ async function hydrate(){
  if(me0.r!=='Sales'){var ib=await all('intake_submissions');INBOX.length=0;ib.forEach(function(x){INBOX.push(x)});INBOX.sort(function(a,b){return a.created_at<b.created_at?1:-1})}
  if(ad){var lr=await SB.from('audit_log').select('*').order('at',{ascending:false}).limit(1500);if(lr.error)throw lr.error;LOGX.length=0;(lr.data||[]).forEach(function(r){var e=describe(r);if(e)LOGX.push(e)});LOGX.sort(function(a,b){return a.t<b.t?-1:1})}
  $('#me').innerHTML='';
- var w=$('#whoami');if(w)w.innerHTML='<b>'+esc(me0.n)+'</b> <span class="pill p-idle">'+me0.r+'</span> <button class="btn" type="button" data-a="pw">Password</button> <button class="btn" type="button" data-a="out">Sign out</button>';
+ var w=$('#whoami');if(w)w.innerHTML='<b>'+esc(me0.n)+'</b> <span class="pill p-idle">'+me0.r+'</span> <button class="btn" type="button" data-a="mfa">Two-step</button> <button class="btn" type="button" data-a="pw">Password</button> <button class="btn" type="button" data-a="out">Sign out</button>';
 }
 function lt(at){var d=new Date(at);return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)+'T'+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)}
 function aname(id){var a=acc(id);return a?a.n:'an account'}
@@ -958,6 +964,7 @@ function describe(r){var n=r.new_row||{},o=r.old_row||{},ch=r.changes||{},T=r.ta
  else if(T==='carrier_vetting'){e.type='Carrier check';e.acc=id;e.txt=(A==='INSERT'?'Added vetting for ':'Updated vetting for ')+aname(id)+(n.auto_expires?': auto expires '+n.auto_expires+', cargo expires '+n.cargo_expires:'')}
  else if(T==='app_settings'){e.type='Settings';e.txt='Changed setting "'+id+'"'}
  else if(T==='profiles'){e.type='Settings';e.txt=A==='INSERT'?'Added staff member '+n.full_name+' ('+n.role+')':ch.role?'Changed '+n.full_name+'\'s role: '+f('role'):ch.active?(n.active?'Reactivated ':'Deactivated ')+n.full_name:'Edited staff profile '+(n.full_name||'')}
+ else if(T==='shipper_users'){e.type='Settings';e.txt=A==='INSERT'?'Added portal login for '+n.full_name+' ('+aname(n.account_id)+')':ch.active?(n.active?'Reactivated portal login for ':'Turned off portal login for ')+n.full_name:'Edited portal login for '+(n.full_name||'')}
  else if(T==='leads'){e.type='Leads';e.txt=A==='INSERT'?'Added lead "'+n.company+'"':ch.status?'Lead "'+n.company+'": '+f('status'):'Edited lead "'+(n.company||o.company)+'"'}
  else if(T==='prospect_runs'){e.type='Prospecting';e.txt='Ran a prospecting pull'}
  else if(T==='intake_submissions'){e.type='Intake';e.txt=A==='INSERT'?'New website submission: '+n.kind+(n.fields&&n.fields.company?' from '+n.fields.company:''):ch.status?'Website submission ('+n.kind+') marked '+n.status:'Edited website submission'}
@@ -998,6 +1005,7 @@ var CLICK={
  imk:function(t){return fromIntake(t.dataset.v)},
  tnew:function(){modal(mNewUser())},
  tedit:function(t){modal(mEditUser(t.dataset.v))},
+ mfa:function(){mfaModal()},
  team:function(){}
 };
 function convLead(id,kind){var l=LEAD.filter(function(x){return x.id===id})[0];if(!l||l.st==='Converted')return;
@@ -1029,8 +1037,9 @@ var SUBMIT={
  fna2:async function(){var v=function(i){return $(i).value.trim()};if(!v('#xn')){toast('Enter a company name.');return}
   return run(async function(){var a=must(await SB.from('accounts').insert({name:v('#xn'),type:$('#xt').value,mc:v('#xm')||null,dot:v('#xd')||null,city:v('#xc')||null,state:v('#xs').toUpperCase()||null,phone:v('#xp')||null,trucks:parseInt(v('#xk'),10)||null,equipment:v('#xe')||null}).select().single()).data;if(v('#xcn'))must(await SB.from('contacts').insert({account_id:a.id,name:v('#xcn'),role:v('#xcr')||null,email:v('#xce')||null,phone:v('#xp')||null}));window.__conv=a.id},'Account created.').then(function(){if(window.__conv){var x=window.__conv;window.__conv=null;go('acct',x)}})},
  fusr:async function(){var v=function(i){return $(i).value.trim()};var b={email:v('#ue'),full_name:v('#un'),role:$('#ur').value,password:$('#up').value};if(b.password.length<12){toast('Password needs at least 12 characters.');return}
+  if(b.role==='shipper'){b.account_id=$('#uac').value;if(!b.account_id){toast('Pick the shipper company first.');return}}
   try{await teamApi('POST',b);modal(null);await loadTeam();render();toast(b.full_name+' can now sign in.')}catch(e){toast(errMsg(e))}},
- fuse:async function(){var f=$('#fuse'),b={id:f.dataset.id,role:$('#er').value,active:$('#ea').value==='1'};if($('#ep').value)b.password=$('#ep').value;if(b.password&&b.password.length<12){toast('Password needs at least 12 characters.');return}
+ fuse:async function(){var f=$('#fuse'),b={id:f.dataset.id,role:$('#er').value||undefined,active:$('#ea').value==='1'};if($('#ep').value)b.password=$('#ep').value;if(b.password&&b.password.length<12){toast('Password needs at least 12 characters.');return}
   try{await teamApi('PATCH',b);modal(null);await loadTeam();await hydrate();render();toast('Saved.')}catch(e){toast(errMsg(e))}}
 };
 var SUBMAP={fno:'fno',fnl:'fnl',fna:'fna',fvi:'fvi',fdoc:'fdoc',frate:'frate',fnq:'fnq',fql:'fql',fpw:'fpw',fnacct:'fna2',fusr:'fusr',fuse:'fuse'};
@@ -1082,11 +1091,13 @@ function fromIntake(id){var x=INBOX.filter(function(y){return y.id===id})[0];if(
 async function token(){var s=await SB.auth.getSession();return s.data&&s.data.session?s.data.session.access_token:''}
 async function teamApi(method,body){var r=await fetch('/api/admin-users',{method:method,headers:{'Content-Type':'application/json',Authorization:'Bearer '+await token()},body:body?JSON.stringify(body):undefined});var j=await r.json().catch(function(){return{}});if(!r.ok)throw new Error(j.error||'Request failed');return j}
 async function loadTeam(){try{var j=await teamApi('GET');TEAM.length=0;(j.users||[]).forEach(function(u){TEAM.push(u)})}catch(e){TEAM.length=0;TEAM.err=errMsg(e)}}
-window.teamV=function(){var rows=TEAM.map(function(u){return '<tr><td><b>'+esc(u.full_name||'')+'</b><div class="sub">'+esc(u.email||'')+'</div></td><td><span class="pill p-idle">'+(RLABEL[u.role]||u.role)+'</span></td><td>'+(u.active?'<span class="pill p-ok">Active</span>':'<span class="pill p-bad">Off</span>')+'</td><td style="white-space:nowrap">'+(u.last_sign_in_at?fdt(lt(u.last_sign_in_at)):'Never')+'</td><td class="num"><button class="btn" type="button" data-a="tedit" data-v="'+u.id+'">Edit</button></td></tr>'}).join('');
+window.teamV=function(){var rows=TEAM.map(function(u){return '<tr><td><b>'+esc(u.full_name||'')+'</b><div class="sub">'+esc(u.email||'')+(u.company?' · '+esc(u.company):'')+'</div></td><td><span class="pill p-idle">'+(RLABEL[u.role]||u.role)+'</span></td><td>'+(u.active?'<span class="pill p-ok">Active</span>':'<span class="pill p-bad">Off</span>')+'</td><td style="white-space:nowrap">'+(u.last_sign_in_at?fdt(lt(u.last_sign_in_at)):'Never')+'</td><td class="num"><button class="btn" type="button" data-a="tedit" data-v="'+u.id+'">Edit</button></td></tr>'}).join('');
  return '<h1>Team</h1><div class="sub">Everyone who can sign in. Roles decide what each person can see, and the database enforces it.</div><div class="tools"><button class="btn pri" type="button" data-a="tnew">Add a teammate</button></div>'+(TEAM.err?'<div class="banner"><div>'+esc(TEAM.err)+'</div></div>':'')+'<div class="card"><div class="tw"><table><thead><tr><th>Person</th><th>Role</th><th>Status</th><th>Last sign-in</th><th></th></tr></thead><tbody>'+(rows||'<tr><td colspan="5" class="empty">No one yet.</td></tr>')+'</tbody></table></div></div><div class="sub" style="margin-top:10px;font-size:12px">Turning someone off blocks their sign-in immediately. Their past work and the change log stay.</div>'};
-function roleOpts(sel){return ['admin','broker','dispatcher','sales'].map(function(r){return '<option value="'+r+'"'+(sel===r?' selected':'')+'>'+RLABEL[r]+'</option>'}).join('')}
-function mNewUser(){return '<form class="form" id="fusr"><h2>Add a teammate</h2><div class="sub">They sign in with this email and password, then change it under Password.</div><label for="un">Full name<input id="un" required></label><label for="ue">Email<input id="ue" type="email" required></label><label for="ur">Role<select id="ur">'+roleOpts('broker')+'</select></label><label for="up">Temporary password (12+ characters)<input id="up" type="text" minlength="12" required autocomplete="off"></label><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px"><button class="btn" type="button" data-a="mclose">Cancel</button><button class="btn pri" type="submit">Add</button></div></form>'}
-function mEditUser(id){var u=TEAM.filter(function(x){return x.id===id})[0];if(!u)return '';return '<form class="form" id="fuse" data-id="'+id+'"><h2>'+esc(u.full_name)+'</h2><div class="sub">'+esc(u.email)+'</div><label for="er">Role<select id="er">'+roleOpts(u.role)+'</select></label><label for="ea">Status<select id="ea"><option value="1"'+(u.active?' selected':'')+'>Active</option><option value="0"'+(u.active?'':' selected')+'>Off (cannot sign in)</option></select></label><label for="ep">New temporary password (leave blank to keep)<input id="ep" type="text" autocomplete="off"></label><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px"><button class="btn" type="button" data-a="mclose">Cancel</button><button class="btn pri" type="submit">Save</button></div></form>'}
+function roleOpts(sel,withShip){return ['admin','broker','dispatcher','sales'].concat(withShip?['shipper']:[]).map(function(r){return '<option value="'+r+'"'+(sel===r?' selected':'')+'>'+RLABEL[r]+'</option>'}).join('')}
+function shipOpts(){var l=ACC.filter(function(a){return a.type==='Shipper'});return l.length?l.map(function(a){return '<option value="'+a.id+'">'+esc(a.n)+'</option>'}).join(''):'<option value="">No shipper accounts yet. Create one under Accounts first.</option>'}
+document.addEventListener('change',function(e){if(e.target&&e.target.id==='ur'){var w=$('#uacw');if(w)w.hidden=e.target.value!=='shipper'}});
+function mNewUser(){return '<form class="form" id="fusr"><h2>Add a teammate</h2><div class="sub">They sign in with this email and password, then change it under Password.</div><label for="un">Full name<input id="un" required></label><label for="ue">Email<input id="ue" type="email" required></label><label for="ur">Role<select id="ur">'+roleOpts('broker',true)+'</select></label><label for="uac" id="uacw" hidden>Shipper company (their portal shows only this company\'s freight)<select id="uac">'+shipOpts()+'</select></label><label for="up">Temporary password (12+ characters)<input id="up" type="text" minlength="12" required autocomplete="off"></label><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px"><button class="btn" type="button" data-a="mclose">Cancel</button><button class="btn pri" type="submit">Add</button></div></form>'}
+function mEditUser(id){var u=TEAM.filter(function(x){return x.id===id})[0];if(!u)return '';return '<form class="form" id="fuse" data-id="'+id+'"><h2>'+esc(u.full_name)+'</h2><div class="sub">'+esc(u.email)+'</div><label for="er">Role<select id="er"'+(u.role==='shipper'?' disabled':'')+'>'+roleOpts(u.role,u.role==='shipper')+'</select></label><label for="ea">Status<select id="ea"><option value="1"'+(u.active?' selected':'')+'>Active</option><option value="0"'+(u.active?'':' selected')+'>Off (cannot sign in)</option></select></label><label for="ep">New temporary password (leave blank to keep)<input id="ep" type="text" autocomplete="off"></label><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px"><button class="btn" type="button" data-a="mclose">Cancel</button><button class="btn pri" type="submit">Save</button></div></form>'}
 var _tabs=tabsR;tabsR=function(){_tabs();var m=me(),h='';if(m.r==='Admin'||m.r==='Broker'||m.r==='Dispatcher')h+='<button type="button" data-a="go" data-v="inbox"'+(S.view==='inbox'?' aria-current="page"':'')+'>Inbox'+(INBOX.filter(function(x){return x.status==='New'}).length?' ('+INBOX.filter(function(x){return x.status==='New'}).length+')':'')+'</button>';
  var box=$('#tabs'),first=box.querySelector('button');if(h&&first)first.insertAdjacentHTML('afterend',h);if(m.r==='Admin')box.insertAdjacentHTML('beforeend','<button type="button" data-a="go" data-v="team"'+(S.view==='team'?' aria-current="page"':'')+'>Team</button>')};
 var _ok=window.okView;window.okView=function(v){var m=me();if(v==='inbox')return m.r==='Admin'||m.r==='Broker'||m.r==='Dispatcher';if(v==='team')return m.r==='Admin';return _ok(v)};
@@ -1094,15 +1105,45 @@ LT.push('Intake');
 /* the team list loads when the Team tab opens */
 var _go=go;go=function(v,id){if(v==='team'){loadTeam().then(function(){_go(v,id)});return}_go(v,id)};
 
+/* ---------- two-step sign-in (authenticator app) ---------- */
+async function enrollInto(el,done){
+ try{var fs=await SB.auth.mfa.listFactors();((fs.data&&fs.data.all)||[]).forEach(function(f){if(f.status!=='verified')SB.auth.mfa.unenroll({factorId:f.id})});
+  var r=must(await SB.auth.mfa.enroll({factorType:'totp',friendlyName:'Authenticator app'})).data;
+  el.innerHTML='<div class="sub">1. Open an authenticator app on your phone (Google Authenticator, Microsoft Authenticator, 1Password or Authy).<br>2. Add an account by scanning this code, or type the key.<br>3. Enter the 6-digit number the app shows.</div><div style="text-align:center;margin:10px 0"><img alt="Scan this code with your authenticator app" src="'+r.totp.qr_code+'" width="170" height="170" style="background:#fff;padding:6px;border-radius:8px;max-width:100%"></div><div class="sub" style="word-break:break-all">Key: <b>'+esc(r.totp.secret)+'</b></div><input id="ecode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="6-digit code" style="width:100%;margin-top:8px"><div style="display:flex;gap:8px;margin-top:10px"><button class="btn pri" type="button" id="ego">Turn on</button></div><div class="sub" id="emsg" style="color:var(--bad);min-height:1.2em"></div>';
+  $('#ego').onclick=async function(){var m=$('#emsg');m.textContent='';try{var c=must(await SB.auth.mfa.challenge({factorId:r.id})).data;must(await SB.auth.mfa.verify({factorId:r.id,challengeId:c.id,code:$('#ecode').value.trim()}));await done()}catch(e){m.textContent='That code did not match. Wait for a fresh one and try again.'}}
+ }catch(e){el.textContent=errMsg(e)}}
+async function mfaModal(){var fs=await SB.auth.mfa.listFactors(),on=((fs.data&&fs.data.totp)||[])[0],adm0=me().r==='Admin';
+ if(on){modal('<div class="form"><h2>Two-step sign-in</h2><div class="sub"><span class="pill p-ok">On</span> You enter a code from your authenticator app each time you sign in.'+(adm0?' It is required for admins.':'')+'</div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">'+(adm0?'':'<button class="btn" type="button" id="mfaoff">Turn off</button>')+'<button class="btn pri" type="button" data-a="mclose">Done</button></div></div>');
+  var off=$('#mfaoff');if(off)off.onclick=async function(){try{must(await SB.auth.mfa.unenroll({factorId:on.id}));modal(null);toast('Two-step sign-in is off.')}catch(e){toast(errMsg(e))}};return}
+ modal('<div class="form"><h2>Turn on two-step sign-in</h2><div id="mfab"></div><div style="display:flex;justify-content:flex-end;margin-top:12px"><button class="btn" type="button" data-a="mclose">Cancel</button></div></div>');
+ enrollInto($('#mfab'),async function(){modal(null);toast('Two-step sign-in is on.')})}
+
 /* ---------- sign in ---------- */
-async function boot(){var box=$('#login'),msg=$('#lgmsg');
+async function boot(){var box=$('#login'),msg=$('#lgmsg'),recovering=/type=recovery/.test(location.hash);
  function show(t){msg.textContent=t||''}
+ function pane(id){['lgf','lgm','lge','lgr'].forEach(function(k){var e=$('#'+k);if(e)e.hidden=(k!==id)});show('')}
  if(!SB){show('Could not load the sign-in service. Check your connection and refresh.');return}
- async function enter(user){ME_ID=user.id;try{await hydrate();box.hidden=true;S.view='home';if(INBOX.length&&me().r!=='Sales'){}render()}catch(e){show(errMsg(e));await SB.auth.signOut()}}
- var s=await SB.auth.getSession();if(s.data&&s.data.session){await enter(s.data.session.user)}
+ if(SB.auth.onAuthStateChange)SB.auth.onAuthStateChange(function(ev){if(ev==='PASSWORD_RECOVERY'){recovering=true;pane('lgr')}});
+ async function enter(user){ME_ID=user.id;try{await hydrate();box.hidden=true;S.view='home';render()}catch(e){pane('lgf');show(errMsg(e));await SB.auth.signOut()}}
+ async function needCode(user){pane('lgm');var fs=await SB.auth.mfa.listFactors(),f=((fs.data&&fs.data.totp)||[])[0];if(!f){show('Two-step sign-in is not set up for this login. Ask an admin.');return}
+  $('#lgm').onsubmit=async function(ev){ev.preventDefault();show('');try{var c=must(await SB.auth.mfa.challenge({factorId:f.id})).data;must(await SB.auth.mfa.verify({factorId:f.id,challengeId:c.id,code:$('#lgc').value.trim()}));$('#lgc').value='';await enter(user)}catch(e){show('That code did not match. Wait for a fresh one and try again.')}}}
+ async function gate(user){
+  var a=(await SB.auth.mfa.getAuthenticatorAssuranceLevel()).data||{};
+  if(a.nextLevel==='aal2'&&a.currentLevel!=='aal2')return needCode(user);
+  var fs=await SB.auth.mfa.listFactors();
+  if(!((fs.data&&fs.data.totp)||[]).length){var pr=await SB.from('profiles').select('role').eq('id',user.id),role=pr.data&&pr.data[0]&&pr.data[0].role;
+   if(role==='admin'){pane('lge');enrollInto($('#lgeb'),async function(){await enter(user)});return}}
+  return enter(user)}
+ var s0=await SB.auth.getSession();if(s0.data&&s0.data.session&&!recovering){await gate(s0.data.session.user)}
+ if(recovering)pane('lgr');
  $('#lgf').addEventListener('submit',async function(ev){ev.preventDefault();show('');var b=$('#lgb');b.disabled=true;b.textContent='Signing in...';
-  var r=await SB.auth.signInWithPassword({email:$('#lge').value.trim(),password:$('#lgp').value});b.disabled=false;b.textContent='Sign in';
-  if(r.error){show('That email and password did not match.');return}await enter(r.data.user)})}
+  var r=await SB.auth.signInWithPassword({email:$('#lge1').value.trim(),password:$('#lgp').value});b.disabled=false;b.textContent='Sign in';
+  if(r.error){show('That email and password did not match.');return}await gate(r.data.user)});
+ $('#lgfp').addEventListener('click',async function(){var em=$('#lge1').value.trim();if(!em){show('Type your email above first, then press Forgot password.');return}
+  await SB.auth.resetPasswordForEmail(em,{redirectTo:location.origin+'/crm'});show('If that email has a login, a reset link is on its way. Check your spam folder too.')});
+ $('#lgr').addEventListener('submit',async function(ev){ev.preventDefault();var p=$('#lgn').value;if(p.length<12){show('Use at least 12 characters.');return}
+  var r=await SB.auth.updateUser({password:p});if(r.error){show(errMsg(r.error));return}recovering=false;history.replaceState(null,'',location.pathname);var u=r.data.user;await gate(u)});
+ $('#lgout').addEventListener('click',function(){SB.auth.signOut().then(function(){location.href=location.pathname})})}
 boot();
 
 render();
